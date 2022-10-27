@@ -57,7 +57,7 @@
    * результат столбец значений добавленный в pd.DataFrame
 2. MACD
    * 1) MACD = ЕМАs(P) − ЕМАi(P)
-```angular2html
+```python
 def macd(s: pd.Series) -> pd.Series:
     # s - столбец значений цен
     return s.ewm() - s.ewm() # формула по ссылке из ишью
