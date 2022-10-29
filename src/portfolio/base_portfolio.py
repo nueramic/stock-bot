@@ -65,7 +65,12 @@ class PortfolioHistory:
         """
 
         self.__history: dict[  # словарь с ключом - номером изменения и данными: дата и время, размер портфеля и состав
-            int, tuple[Timestamp, float, tuple[tuple[str, SecurityState]]]
+            int, dict[
+                str,
+                Timestamp,
+                float,
+                tuple[tuple[str, SecurityState]]
+            ]
         ] = dict()
         self.__counter = 0
 
@@ -87,7 +92,11 @@ class PortfolioHistory:
         self.__counter += 1
 
         sec_states: list[SecurityState] = list(map(lambda x: x.short_state(), sec_states))
-        self.__history[self.__counter] = (timestamp, balance, tuple(zip(securities, sec_states)))
+        self.__history[self.__counter] = {
+            'dt': timestamp,
+            'balance': balance,
+            'structure': tuple(zip(securities, sec_states))
+        }
 
     def __repr__(self) -> str:
         return str(self.__history)
@@ -115,19 +124,45 @@ class StockPurchase:
 
 class Portfolio:
 
-    def __init__(self, balance: [int, float] = 100_000):
+    def __init__(self, init_balance: [int, float] = 100_000):
         """
         Инициализация портфеля
 
-        :param balance: начальный баланс портфеля
+        :param init_balance: начальный баланс портфеля
         """
-        if not isinstance(balance, Union[int, float]):
+        if not isinstance(init_balance, Union[int, float]):
             raise ValueError('Баланс должен быть числом типа int или float')
 
-        self.balance = balance
-        self.balance_history = list[defaultdict()]
-        self.securities = defaultdict(SecurityState)  # инициализируем пустой дефолтный словарь - портфель бумаг
-        self.history = PortfolioHistory()
+        self.__free_balance = init_balance  # баланс рублей в портфеле
+        self.__full_balance = init_balance  # баланс с учетом ценности всех бумаг
+        self.__securities = defaultdict(SecurityState)  # инициализируем пустой дефолтный словарь - портфель бумаг
+        self.__history = PortfolioHistory()
+
+    @property
+    def free_balance(self) -> float:
+        return float(self.__free_balance)
+
+    @property
+    def full_balance(self) -> float:
+        return float(self.__full_balance)
+
+    @property
+    def securities(self) -> dict:
+        return self.__securities
+
+    @property
+    def history(self) -> dict:
+        return self.__history.get_history()
+
+    def _update_full_balance(self):
+        """
+        Обновляет полный баланс портфеля;
+        """
+        self.__full_balance = 0
+        for security in self.__securities.values():
+            self.__full_balance += security.amount * security.price
+
+        self.__full_balance += self.__free_balance
 
     def update_securities(self, *args: StockPurchase) -> None:
         """
@@ -149,14 +184,14 @@ class Portfolio:
         self.hook()
 
     def hook(self):
-        sec_names = []
-        sec_states = []
-        for name, state in self.securities.items():
+        sec_names = ['RUB']
+        sec_states = [SecurityState(self.__free_balance, 1)]
+        for name, state in self.__securities.items():
             sec_names.append(name)
             sec_states.append(state)
 
         sec_names: list[str]
-        self.history.log_history(self.balance, pd.Timestamp.now(), tuple(sec_names), tuple(sec_states))
+        self.__history.log_history(self.__full_balance, pd.Timestamp.now(), tuple(sec_names), tuple(sec_states))
 
     def _update_value_securities(self,
                                  security: str,
@@ -172,7 +207,7 @@ class Portfolio:
         :return: обновляет состояние портфеля и ничего не возвращает
         """
 
-        cur_state: SecurityState = self.securities[security]
+        cur_state: SecurityState = self.__securities[security]
 
         # Если мы докупаем бумаги, то их количество увеличивается, и цена взвешивается. Баланс просто уменьшается
 
@@ -197,7 +232,8 @@ class Portfolio:
             else:
                 self._same_directional_update(security, update_security_state)
 
-        self.balance -= exchange_fees
+        self.__free_balance -= exchange_fees
+        self._update_full_balance()
 
     def _same_directional_update(self,
                                  security: str,
@@ -210,7 +246,7 @@ class Portfolio:
         :param update_security_state: купленное количество бумаг и их стоимость;
         :return: обновляет состояние портфеля и ничего не возвращает
         """
-        cur_state: SecurityState = self.securities[security]
+        cur_state: SecurityState = self.__securities[security]
 
         # обновляем количество
         new_amount = cur_state.amount + update_security_state.amount
@@ -220,8 +256,9 @@ class Portfolio:
         new_price /= cur_state.amount + update_security_state.amount
 
         # обновляем баланс и состояние по бумаге
-        self.balance -= update_security_state.security_value()
-        self.securities[security].update_state(new_amount, new_price)
+        self.__free_balance -= update_security_state.security_value()
+        self.__securities[security].update_state(new_amount, new_price)
+        self._update_full_balance()
 
     def _different_directional_update(self,
                                       security: str,
@@ -233,7 +270,7 @@ class Portfolio:
         :param update_security_state: проданное количество бумаг и их стоимость;
         :return: обновляет состояние портфеля и ничего не возвращает
         """
-        cur_state: SecurityState = self.securities[security]
+        cur_state: SecurityState = self.__securities[security]
 
         # обновляем количество, если продали или купили не больше текущей позиции
         if abs(cur_state.amount) >= abs(update_security_state.amount):
@@ -246,24 +283,25 @@ class Portfolio:
             new_price = update_security_state.price
 
         # обновляем баланс
-        self.balance -= update_security_state.security_value()
-        self.securities[security].update_state(new_amount, new_price)
+        self.__free_balance -= update_security_state.security_value()
+        self.__securities[security].update_state(new_amount, new_price)
+        self._update_full_balance()
 
 
 if __name__ == '__main__':
     port = Portfolio()
-    print(port.securities, port.balance)
+    print(port.securities, port.free_balance)
 
     port.update_securities(StockPurchase('SBER', 100, 120))
-    print(port.securities, port.balance)
+    print(port.securities, port.free_balance)
 
     port.update_securities(StockPurchase('SBER', 200, 110), StockPurchase('appl', 200, 200))
-    print(port.securities, port.balance)
+    print(port.securities, port.free_balance)
 
     port.update_securities(StockPurchase('SBER', -300, 140), StockPurchase('appl', -200, 190))
-    print(port.securities, port.balance)
+    print(port.securities, port.free_balance)
 
     print(port.securities['SBER'].history_sales)
     print(sum(port.securities['SBER'].history_sales))
-    for epoch in port.history.get_history().items():
+    for epoch in port.history.items():
         print(epoch)
