@@ -3,7 +3,7 @@ import asyncio
 import aiohttp
 import pandas as pd
 
-from src.parse_securities.async_moex import get_security_history
+from src.parse_securities.async_moex import get_security_history_daily
 from src.structures import StrategyResponseMACD, RequestOneSecurity
 
 
@@ -120,8 +120,8 @@ async def _get_decision_macd_cs_bullish(prices: pd.Series, ma_period: int = 60, 
 
 async def test():
     """ Тест - скачиваем данные по сберу и запускаем нашу стратегию для каждой даты """
-    req = RequestOneSecurity('SBER', '2022-04-01', '2022-09-01', ['TRADEDATE', 'CLOSE'])
-    pr = await get_security_history(req)
+    req = RequestOneSecurity('SBER', '2022-04-01', '2022-09-01', '1d', ['TRADEDATE', 'CLOSE'])
+    pr = await get_security_history_daily(req)
     pr = pr.set_index('TRADEDATE')['CLOSE']
 
     async with asyncio.TaskGroup() as tg:
