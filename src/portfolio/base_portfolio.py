@@ -1,60 +1,12 @@
+import asyncio
 from collections import defaultdict
 from copy import copy
-from typing import Union, Self
+from typing import Union
 
 import pandas as pd
 from pandas import Timestamp
 
-PRICE_PRECISION = 16
-
-
-class SecurityState:
-
-    def __init__(self, amount: int = 0, price: float = 0):
-        """
-        Конструктор класса, который будет хранить состояние конкретной бумаги.
-
-        :param amount: количество актива;
-        :param price: цена актива
-        """
-        self.amount: int = amount
-        self.price: float = round(price, PRICE_PRECISION)
-        self.history_sales: list[float] = [amount * self.price] if amount != 0 else []
-
-    def __repr__(self) -> str:
-        """
-        :return: Возвращает строку с информацией о бумаге в портфеле
-        """
-        return str({'amount': self.amount, 'price': self.price})
-
-    def security_value(self) -> float:
-        """
-        Возвращает стоимость всех бумаг: amount * price
-
-        :return: стоимость всех бумаг
-        """
-        return self.price * self.amount
-
-    def update_state(self, new_amount: int = 0, new_price: float = 0) -> None:
-        """
-        Обновляет состояние бумаги
-
-        :param new_amount: количество актива;
-        :param new_price: цена актива
-        """
-
-        self.history_sales.append(self.amount * self.price - new_amount * new_price)
-
-        self.amount = new_amount
-        self.price = round(new_price, PRICE_PRECISION)
-
-    def short_state(self) -> Self:
-        """
-        :return: возвращает состояние бумаги без ее истории. Не изменяет объект
-        """
-        copy_self = copy(self)
-        copy_self.history_sales = []
-        return copy_self
+from src.structures import SecurityState, StockPurchase
 
 
 class PortfolioHistory:
@@ -69,7 +21,9 @@ class PortfolioHistory:
                 str,
                 Timestamp,
                 float,
-                tuple[tuple[str, SecurityState]]
+                dict[str, SecurityState],
+                dict[str, SecurityState],
+                dict[str, SecurityState]
             ]
         ] = dict()
         self.__counter = 0
@@ -77,25 +31,27 @@ class PortfolioHistory:
     def log_history(self,
                     balance: [float, int],
                     timestamp: Timestamp,
-                    securities: tuple[str],
-                    sec_states: tuple[SecurityState]):
+                    current_structure: dict[str, SecurityState],
+                    received_structure: dict[str, SecurityState],
+                    new_structure: dict[str, SecurityState]
+                    ):
         """
         Логирование состояния портфеля
 
         :param balance: новый баланс портфеля
         :param timestamp: дата и    время изменения
-        :param securities: название бумаги
-        :param sec_states: количество и цена бумаги в портфеле
+        :param current_structure: текущее состояние портфеля
+        :param received_structure: полученное состояние портфеля
+        :param new_structure: обновленное состояние портфеля
         :return: только обновляет историю
         """
-
         self.__counter += 1
-
-        sec_states: list[SecurityState] = list(map(lambda x: x.short_state(), sec_states))
         self.__history[self.__counter] = {
             'dt': timestamp,
             'balance': balance,
-            'structure': tuple(zip(securities, sec_states))
+            'current_structure': dict(current_structure),
+            'received_structure': dict(received_structure),
+            'new_structure': dict(new_structure),
         }
 
     def __repr__(self) -> str:
@@ -103,23 +59,6 @@ class PortfolioHistory:
 
     def get_history(self):
         return self.__history
-
-
-class StockPurchase:
-
-    def __init__(self, name: str, amount: int, price: float, exchange_fees: float = 0):
-        """
-        Конструктор класса покупки на бирже нового актива.
-
-        :param name: название бумаги. Оно обязательно будет приведено к верхнему регистру;
-        :param amount: количество купленных бумаг. Может быть отрицательным при продаже;
-        :param price: цена продажи / покупки
-        :param exchange_fees: комиссии по операции
-        """
-        self.name = name.upper()
-        self.amount = int(amount)
-        self.price = price
-        self.exchange_fees = exchange_fees
 
 
 class Portfolio:
@@ -175,23 +114,38 @@ class Portfolio:
                      разница, при ее наличии. Если в короткой позиции мы продаем бумаги, то их цена перевзвешивается;
         :return: обновляет внутренний портфель
         """
+        current_structure = self.securities
+        new_structure = dict()
+
         for security in args:
             security: StockPurchase
+            new_structure[security.name] = SecurityState(security.amount, security.price)
+
             self._update_value_securities(security.name,
                                           SecurityState(security.amount, security.price),
                                           security.exchange_fees)
 
-        self.hook()
+        asyncio.run(self.hook(current_structure, new_structure, copy(self.securities)))
 
-    def hook(self):
-        sec_names = ['RUB']
-        sec_states = [SecurityState(self.__free_balance, 1)]
-        for name, state in self.__securities.items():
-            sec_names.append(name)
-            sec_states.append(state)
+    async def hook(self,
+                   current_structure: dict[str, SecurityState],
+                   received_structure: dict[str, SecurityState],
+                   new_structure: dict[str, SecurityState]):
+        """
+        После любого обновления изменяет внутреннее состояние.
 
-        sec_names: list[str]
-        self.__history.log_history(self.__full_balance, pd.Timestamp.now(), tuple(sec_names), tuple(sec_states))
+        :param current_structure: текущее состояние портфеля
+        :param received_structure: полученное состояние портфеля
+        :param new_structure: обновленное состояние портфеля
+        """
+
+        self.__history.log_history(
+            self.__full_balance,
+            pd.Timestamp.now(),
+            current_structure,
+            received_structure,
+            new_structure
+        )
 
     def _update_value_securities(self,
                                  security: str,
@@ -207,7 +161,7 @@ class Portfolio:
         :return: обновляет состояние портфеля и ничего не возвращает
         """
 
-        cur_state: SecurityState = self.__securities[security]
+        cur_state: SecurityState = copy(self.__securities[security])
 
         # Если мы докупаем бумаги, то их количество увеличивается, и цена взвешивается. Баланс просто уменьшается
 
@@ -273,7 +227,7 @@ class Portfolio:
         cur_state: SecurityState = self.__securities[security]
 
         # обновляем количество, если продали или купили не больше текущей позиции
-        if abs(cur_state.amount) >= abs(update_security_state.amount):
+        if abs(cur_state.amount) > abs(update_security_state.amount):
             new_amount = cur_state.amount + update_security_state.amount
             new_price = cur_state.price
 
@@ -295,10 +249,10 @@ if __name__ == '__main__':
     port.update_securities(StockPurchase('SBER', 100, 120))
     print(port.securities, port.free_balance)
 
-    port.update_securities(StockPurchase('SBER', 200, 110), StockPurchase('appl', 200, 200))
+    port.update_securities(StockPurchase('SBER', -20, 100), StockPurchase('appl', 200, 200))
     print(port.securities, port.free_balance)
 
-    port.update_securities(StockPurchase('SBER', -300, 140), StockPurchase('appl', -200, 190))
+    port.update_securities(StockPurchase('SBER', -300, 140), StockPurchase('appl', -200, 210))
     print(port.securities, port.free_balance)
 
     print(port.securities['SBER'].history_sales)
