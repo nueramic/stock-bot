@@ -100,10 +100,10 @@ async def sim(balance: float = 100_000):
     output_df['Итоговый баланс'] = output_df.sum(axis=1)
     output_df.to_excel('output_macd_2022_11_01.xlsx')
     fig_by_tickers = px.line(output_df.iloc[:, :-1], title='<b>Динамика балансов по бумагам</b>')
-    fig_by_tickers.to_html('balance_by_tickers_macd_2022_11_01.html')
+    fig_by_tickers.write_html('./balance_by_tickers_macd_2022_11_01.html')
 
     fig_full_balance = px.line(output_df.iloc[:, -1], title='<b>Динамика итогового баланса</b>')
-    fig_full_balance.to_html('balance_full_macd_2022_11_01.html')
+    fig_full_balance.write_html('./balance_full_macd_2022_11_01.html')
 
 
 if __name__ == '__main__':
