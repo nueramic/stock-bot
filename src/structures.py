@@ -9,6 +9,7 @@ PRICE_PRECISION = 16
 StrategyResponseMACD = NamedTuple(
     'strategy_macd',
     name=[str, None],
+    flg_action=[int, 0],  # 1 - bullish, -1 - bearish, 0 - no signal
     price=[float, None],
     dt=[pd.Timestamp, None],
     stop_loss=[float, None],

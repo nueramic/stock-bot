@@ -1,6 +1,6 @@
 import asyncio
 from collections import defaultdict
-from copy import copy
+from copy import copy, deepcopy
 from typing import Union
 
 import pandas as pd
@@ -114,18 +114,18 @@ class Portfolio:
                      разница, при ее наличии. Если в короткой позиции мы продаем бумаги, то их цена перевзвешивается;
         :return: обновляет внутренний портфель
         """
-        current_structure = self.securities
-        new_structure = dict()
+        current_structure = deepcopy(self.securities)
+        received_structure = dict()
 
         for security in args:
             security: StockPurchase
-            new_structure[security.name] = SecurityState(security.amount, security.price)
+            received_structure[security.name] = SecurityState(security.amount, security.price)
 
             self._update_value_securities(security.name,
                                           SecurityState(security.amount, security.price),
                                           security.exchange_fees)
 
-        asyncio.run(self.hook(current_structure, new_structure, copy(self.securities)))
+        asyncio.run(self.hook(current_structure, deepcopy(received_structure), deepcopy(self.securities)))
 
     async def hook(self,
                    current_structure: dict[str, SecurityState],
@@ -259,3 +259,5 @@ if __name__ == '__main__':
     print(sum(port.securities['SBER'].history_sales))
     for epoch in port.history.items():
         print(epoch)
+
+    pd.DataFrame(port.history).T.to_csv('history_test_sber_v1.csv')

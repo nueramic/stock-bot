@@ -80,6 +80,7 @@ async def _get_decision_macd_cs_bearish(prices: pd.Series, ma_period: int = 60, 
 
         response = StrategyResponseMACD(
             'bearish-conservative',
+            1,
             round(prices.iloc[-1], 2),
             prices.index[-1],
             round(st, 2),
@@ -87,7 +88,7 @@ async def _get_decision_macd_cs_bearish(prices: pd.Series, ma_period: int = 60, 
         )
         return response
 
-    return StrategyResponseMACD(None, None, None, None, None)
+    return StrategyResponseMACD(None, 0, None, None, None, None)
 
 
 async def _get_decision_macd_cs_bullish(prices: pd.Series, ma_period: int = 60, **kwargs) -> StrategyResponseMACD:
@@ -108,6 +109,7 @@ async def _get_decision_macd_cs_bullish(prices: pd.Series, ma_period: int = 60, 
 
         response = StrategyResponseMACD(
             'bullish-conservative',
+            1,
             round(prices.iloc[-1], 2),
             prices.index[-1],
             round(st, 2),
@@ -115,7 +117,7 @@ async def _get_decision_macd_cs_bullish(prices: pd.Series, ma_period: int = 60, 
         )
         return response
 
-    return StrategyResponseMACD(None, None, None, None, None)
+    return StrategyResponseMACD(None, 0, None, None, None, None)
 
 
 async def test():
