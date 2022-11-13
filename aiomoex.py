@@ -3,13 +3,13 @@
 
 # # Подключение библиотек
 
-# In[20]:
+# In[10]:
 
 
 # !pip install aiomoex
 
 
-# In[61]:
+# In[11]:
 
 
 import asyncio 
@@ -22,7 +22,7 @@ import pandas as pd
 
 # # Параметры, которые будем использовать в примерах
 
-# In[122]:
+# In[12]:
 
 
 ticker = 'SBER'
@@ -35,7 +35,7 @@ interval = 60
 # # 0. Функция для вывода всех возможных тикеров библиотеки
 # ### get_board_securities()
 
-# In[142]:
+# In[13]:
 
 
 async def get_board_securities():
@@ -44,10 +44,34 @@ async def get_board_securities():
     return data
 
 
-# In[143]:
+# In[14]:
 
 
 await get_board_securities()
+
+
+# # 0.1. Функция для вывода количества акций в лоте
+
+# In[15]:
+
+
+async def get_lotsize(ticker: str) -> int:
+    async with aiohttp.ClientSession() as session:
+        securities = await get_board_securities()
+        lotsize = securities[securities['SECID'] == ticker]['LOTSIZE']
+    return list(lotsize.values)[0]
+
+
+# In[16]:
+
+
+await get_lotsize('VTBR')
+
+
+# In[ ]:
+
+
+
 
 
 # # 1. Получить интервал дат торгов тикером
@@ -264,4 +288,10 @@ async def main():
         df.info()
 
 await main() 
+
+
+# In[ ]:
+
+
+
 
