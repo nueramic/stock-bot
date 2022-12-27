@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>src.structures.st_strategies</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+          <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/katex-math.css" type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script src="../../../_static/katex.min.js"></script>
+        <script src="../../../_static/auto-render.min.js"></script>
+        <script src="../../../_static/katex_autorenderer.js"></script>
+        <script src="../../../_static/require.min.js"></script>
+        <script src="../../../_static/custom.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">stock-bot-gav</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#welcome-to-stock-bot-gav-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../index.html" class="reference internal ">Welcome to stock-bot-gav’s documentation!</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">stock-bot</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../src.structures.html" class="reference internal ">src.structures package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>src.structures.st_strategies</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for src.structures.st_strategies</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="TypeAction"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.TypeAction">[docs]</a><span class="k">class</span> <span class="nc">TypeAction</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс, в котором определены флаги действий</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOTHING</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">BUY</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">SELL</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="StrategyResponse"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.StrategyResponse">[docs]</a><span class="k">class</span> <span class="nc">StrategyResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс, в котором определена общая структура ответа от стратегии</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StrategyResponse.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.StrategyResponse.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">type_action</span><span class="p">:</span> <span class="n">TypeAction</span> <span class="o">=</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">NOTHING</span><span class="p">,</span>
+                 <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dtime_now</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">stop_loss</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">take_profit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">comment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Конструктор класса</span>
+
+<span class="sd">        :param ticker: название инструмента / стратегии</span>
+<span class="sd">        :param type_action: флаг действия. 1 - покупка, -1 - продажа, 0 - ничего не делать</span>
+<span class="sd">        :param price: цена</span>
+<span class="sd">        :param quantity: количество акций</span>
+<span class="sd">        :param dtime_now: дата и время</span>
+<span class="sd">        :param stop_loss: стоп-лосс</span>
+<span class="sd">        :param take_profit: тейк-профит</span>
+<span class="sd">        :param comment: комментарий, описание действия, которое нужно совершить</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type_action</span> <span class="o">=</span> <span class="n">type_action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtime_now</span> <span class="o">=</span> <span class="n">dtime_now</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_loss</span> <span class="o">=</span> <span class="n">stop_loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">take_profit</span> <span class="o">=</span> <span class="n">take_profit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span> <span class="o">=</span> <span class="n">quantity</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;StrategyResponse(&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ticker : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">type_action : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">type_action</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">price : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">quantity : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">dtime_now : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dtime_now</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">stop_loss : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_loss</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">take_profit : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">take_profit</span><span class="si">}</span><span class="s1">,&#39;</span> \
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">comment : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="si">}</span><span class="s1">)&#39;</span></div>
+
+
+<div class="viewcode-block" id="DataRequest"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.DataRequest">[docs]</a><span class="k">class</span> <span class="nc">DataRequest</span><span class="p">:</span>
+
+<div class="viewcode-block" id="DataRequest.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.DataRequest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">tickers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dt_start</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dt_end</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dt_frequency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;TRADEDATE&#39;</span><span class="p">,</span> <span class="s1">&#39;CLOSE&#39;</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Конструктор базового класса запроса стратегии.</span>
+
+<span class="sd">        :param tickers: список тикеров, для которых нужно получить данные</span>
+<span class="sd">        :param dt_start: дата и время начала периода</span>
+<span class="sd">        :param dt_end: дата и время конца периода</span>
+<span class="sd">        :param dt_frequency: частота данных</span>
+<span class="sd">        :param columns: необходимые колонки, по умолчанию дата-время + цена закрытия</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: добавить проверку типов</span>
+
+        <span class="k">if</span> <span class="n">tickers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tickers</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">tickers</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">dt_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dt_start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">365</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dt_end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dt_end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">dt_frequency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dt_frequency</span> <span class="o">=</span> <span class="s1">&#39;1D&#39;</span>
+
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;TRADEDATE&#39;</span><span class="p">,</span> <span class="s1">&#39;CLOSE&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span> <span class="o">=</span> <span class="n">tickers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span> <span class="o">=</span> <span class="n">dt_start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dt_start</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">)</span> <span class="k">else</span> <span class="n">dt_start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_end</span> <span class="o">=</span> <span class="n">dt_end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dt_end</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">)</span> <span class="k">else</span> <span class="n">dt_end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_frequency</span> <span class="o">=</span> <span class="n">dt_frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span></div>
+
+<div class="viewcode-block" id="DataRequest.get_json"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.DataRequest.get_json">[docs]</a>    <span class="k">def</span> <span class="nf">get_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод, который возвращает json-представление класса</span>
+
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            &gt;&gt;&gt; DataRequest([&#39;SBER&#39;], pd.Timestamp(&#39;2021-01-01&#39;)).get_json()[&#39;tickers&#39;]</span>
+<span class="sd">            [&#39;SBER&#39;]</span>
+
+<span class="sd">        :return: json-представление класса</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span><span class="si">}</span><span class="s1">)&#39;</span></div>
+
+
+<div class="viewcode-block" id="BaseStrategy"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.BaseStrategy">[docs]</a><span class="k">class</span> <span class="nc">BaseStrategy</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Базовый класс стратегии. При создании экземпляра класса, в качестве аргументов передаются:</span>
+<span class="sd">    Необходимые параметры для работы конкретной стратегии.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BaseStrategy.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.BaseStrategy.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseStrategy.get_decision"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.BaseStrategy.get_decision">[docs]</a>    <span class="k">def</span> <span class="nf">get_decision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrategyResponse</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод, который возвращает решение стратегии.</span>
+
+<span class="sd">        :param args:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return: StrategyResponse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseStrategy.get_request"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_strategies.BaseStrategy.get_request">[docs]</a>    <span class="k">def</span> <span class="nf">get_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataRequest</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод, который возвращает запрос стратегии.</span>
+
+<span class="sd">        :param args:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return: DataRequest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, barbarich vi, taranenko gs, tsoi as, burkina es.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>src.structures.st_portfolio</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+          <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/katex-math.css" type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script src="../../../_static/katex.min.js"></script>
+        <script src="../../../_static/auto-render.min.js"></script>
+        <script src="../../../_static/katex_autorenderer.js"></script>
+        <script src="../../../_static/require.min.js"></script>
+        <script src="../../../_static/custom.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">stock-bot-gav</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#welcome-to-stock-bot-gav-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../index.html" class="reference internal ">Welcome to stock-bot-gav’s documentation!</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">stock-bot</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../src.structures.html" class="reference internal ">src.structures package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>src.structures.st_portfolio</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for src.structures.st_portfolio</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">Timestamp</span>
+
+<span class="kn">from</span> <span class="nn">src.strategies.strategy_macd</span> <span class="kn">import</span> <span class="n">get_decision_macd_conservative_strategy</span>
+<span class="kn">from</span> <span class="nn">src.structures.st_purchase</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.structures.st_securities</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.structures.st_strategies</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">MOEX_RUSSIA_INDEX_TICKERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GAZP&#39;</span><span class="p">,</span> <span class="s1">&#39;GLTR&#39;</span><span class="p">,</span> <span class="s1">&#39;MAGN&#39;</span><span class="p">,</span> <span class="s1">&#39;MGTS&#39;</span><span class="p">,</span> <span class="s1">&#39;SBER&#39;</span><span class="p">,</span> <span class="s1">&#39;TATN&#39;</span><span class="p">,</span> <span class="p">]</span>
+
+
+<div class="viewcode-block" id="Securities"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Securities">[docs]</a><span class="k">class</span> <span class="nc">Securities</span><span class="p">(</span><span class="n">defaultdict</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+<div class="viewcode-block" id="Securities.get_json"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Securities.get_json">[docs]</a>    <span class="k">def</span> <span class="nf">get_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div></div>
+
+
+<div class="viewcode-block" id="PortfolioHistory"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.PortfolioHistory">[docs]</a><span class="k">class</span> <span class="nc">PortfolioHistory</span><span class="p">:</span>
+<div class="viewcode-block" id="PortfolioHistory.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.PortfolioHistory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Конструктор класса, отвечающего за историю по портфелю</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>  <span class="c1"># словарь с ключом - номером изменения и данными: дата и время, размер портфеля и состав</span>
+            <span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span>
+                <span class="nb">str</span><span class="p">,</span>
+                <span class="n">Timestamp</span><span class="p">,</span>
+                <span class="nb">float</span><span class="p">,</span>
+                <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SecurityState</span><span class="p">],</span>
+                <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SecurityState</span><span class="p">],</span>
+                <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SecurityState</span><span class="p">]</span>
+            <span class="p">]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="PortfolioHistory.log_history"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.PortfolioHistory.log_history">[docs]</a>    <span class="k">def</span> <span class="nf">log_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">balance</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+                    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                    <span class="n">current_structure</span><span class="p">:</span> <span class="n">Securities</span><span class="p">,</span>
+                    <span class="n">received_structure</span><span class="p">:</span> <span class="n">Securities</span><span class="p">,</span>
+                    <span class="n">new_structure</span><span class="p">:</span> <span class="n">Securities</span>
+                    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Логирование состояния портфеля</span>
+
+<span class="sd">        :param balance: новый баланс портфеля</span>
+<span class="sd">        :param timestamp: дата и    время изменения</span>
+<span class="sd">        :param current_structure: текущее состояние портфеля</span>
+<span class="sd">        :param received_structure: полученное состояние портфеля</span>
+<span class="sd">        :param new_structure: обновленное состояние портфеля</span>
+<span class="sd">        :return: только обновляет историю</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;dt&#39;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+            <span class="s1">&#39;balance&#39;</span><span class="p">:</span> <span class="n">balance</span><span class="p">,</span>
+            <span class="s1">&#39;current_structure&#39;</span><span class="p">:</span> <span class="n">current_structure</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span>
+            <span class="s1">&#39;received_structure&#39;</span><span class="p">:</span> <span class="n">received_structure</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span>
+            <span class="s1">&#39;new_structure&#39;</span><span class="p">:</span> <span class="n">new_structure</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PortfolioHistory.get_history"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.PortfolioHistory.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Portfolio"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio">[docs]</a><span class="k">class</span> <span class="nc">Portfolio</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Portfolio.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">init_balance</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100_000</span><span class="p">,</span>
+                 <span class="n">tickers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">weights</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">strategy</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">type_process</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;sim&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализация портфеля</span>
+
+<span class="sd">        :param init_balance: начальный баланс портфеля;</span>
+<span class="sd">        :param tickers: список тикеров акций, которые будут входить в портфель. Если не указан, то портфель будет</span>
+<span class="sd">                        состоять из всех акций moex russia index;</span>
+<span class="sd">        :param weights: веса акций в портфеле. Если не указаны, то все акции будут иметь одинаковый вес;</span>
+<span class="sd">        :param strategy: стратегия, которая будет использоваться для обновления портфеля.</span>
+<span class="sd">        :param type_process: тип процесса, в котором работает портфель. Может быть &#39;sim&#39; или &#39;real&#39;, соответственно</span>
+<span class="sd">                             симуляция или реальный процесс</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_balance</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Баланс должен быть числом типа int или float&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span> <span class="o">=</span> <span class="n">init_balance</span>  <span class="c1"># баланс рублей в портфеле</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__max_leverage</span> <span class="o">=</span> <span class="mf">0.75</span>  <span class="c1"># максимальный уровень плеча</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__full_balance</span> <span class="o">=</span> <span class="n">init_balance</span>  <span class="c1"># баланс с учетом ценности всех бумаг</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span> <span class="o">=</span> <span class="n">Securities</span><span class="p">(</span><span class="n">SecurityState</span><span class="p">)</span>  <span class="c1"># инициализируем пустой дефолтный словарь - портфель бумаг</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history</span> <span class="o">=</span> <span class="n">PortfolioHistory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+        <span class="k">if</span> <span class="n">tickers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span> <span class="o">=</span> <span class="n">MOEX_RUSSIA_INDEX_TICKERS</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span> <span class="o">=</span> <span class="n">tickers</span>
+
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_shares</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">type_process</span> <span class="o">!=</span> <span class="s1">&#39;sim&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Реальный процесс еще не реализован&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__type_process</span> <span class="o">=</span> <span class="n">type_process</span> <span class="k">if</span> <span class="n">type_process</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sim&#39;</span><span class="p">,</span> <span class="s1">&#39;real&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;sim&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate_sim_exchange_fee</span> <span class="o">=</span> <span class="mf">0.00125</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2022-09-15 11:00:00&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flg_end_process</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Portfolio.calc_shares"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.calc_shares">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">calc_shares</span><span class="p">(</span><span class="n">tickers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Расчет весов акций по ковариации</span>
+
+<span class="sd">        :param tickers: датафрейм с ценами закрытия акций;</span>
+<span class="sd">        :return: вектор весов акций</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">DataRequest</span><span class="p">(</span>
+            <span class="n">tickers</span><span class="o">=</span><span class="n">tickers</span><span class="p">,</span>
+            <span class="n">dt_start</span><span class="o">=</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">365</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="n">dt_end</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="n">dt_frequency</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span>
+        <span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_security_history_aiomoex</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+        <span class="n">df_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">df_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ticker</span><span class="p">))</span>
+
+        <span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df_data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">df_data</span> <span class="o">/</span> <span class="n">df_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">cov</span><span class="p">())</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="n">shares</span> <span class="o">/</span> <span class="n">shares</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">shares</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type_process</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__type_process</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">free_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">full_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__full_balance</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">securities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="o">.</span><span class="n">get_history</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_update_full_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Обновляет полный баланс портфеля;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__full_balance</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">security</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__full_balance</span> <span class="o">+=</span> <span class="n">security</span><span class="o">.</span><span class="n">quantity</span> <span class="o">*</span> <span class="n">security</span><span class="o">.</span><span class="n">price</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__full_balance</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span>
+
+<div class="viewcode-block" id="Portfolio.update_securities"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.update_securities">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">update_securities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">StrategyResponse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Обновляет бумаги в портфеле.</span>
+
+<span class="sd">        :param args: Если позиция короткая, то количество отрицательное.</span>
+<span class="sd">                     Если бумаги были проданы или куплены количество соответственно положительное или отрицательное.</span>
+<span class="sd">                     После обновления цена будет перевзвешена в соответствии с количеством. Если мы стоим в короткой</span>
+<span class="sd">                     позиции, то покупка просто сократит количество бумаг, а на баланс может поступить положительная</span>
+<span class="sd">                     разница, при ее наличии. Если в короткой позиции мы продаем бумаги, то их цена перевзвешивается;</span>
+
+<span class="sd">        :return: обновляет внутренний портфель</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">current_structure</span><span class="p">:</span> <span class="n">Securities</span>  <span class="c1"># логирование в истории состояний по бумагам</span>
+        <span class="n">received_structure</span><span class="p">:</span> <span class="n">Securities</span>  <span class="c1"># логирование в истории состояний по бумагам</span>
+        <span class="n">new_structure</span><span class="p">:</span> <span class="n">Securities</span>  <span class="c1"># логирование в истории состояний по бумагам</span>
+
+        <span class="n">current_structure</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">)</span>
+        <span class="n">received_structure</span> <span class="o">=</span> <span class="n">Securities</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__type_process</span> <span class="o">==</span> <span class="s1">&#39;sim&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">strategy_response</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="n">purchase_process</span> <span class="o">=</span> <span class="n">StockPurchaseProcessMoex</span><span class="p">(</span>
+                    <span class="n">purchase_requests</span><span class="o">=</span><span class="p">[</span>
+                        <span class="n">StockPurchaseRequest</span><span class="p">(</span>
+                            <span class="n">ticker</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span>
+                            <span class="n">type_action</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">type_action</span><span class="p">,</span>
+                            <span class="n">amt_assets</span><span class="o">=</span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_amount</span><span class="p">(</span><span class="n">strategy_response</span><span class="p">),</span>
+                            <span class="n">price</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+                            <span class="n">dtime_now</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">purchase_process</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># обрабатываем покупки по одной штуке</span>
+                <span class="n">received_state</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">SecurityState</span><span class="p">(</span>
+                    <span class="n">quantity</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">quantity</span><span class="p">,</span>
+                    <span class="n">price</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">market_price</span><span class="p">,</span>
+                    <span class="n">stop_loss</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">stop_loss</span><span class="p">,</span>
+                    <span class="n">take_profit</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">take_profit</span>
+                <span class="p">))</span>
+
+                <span class="n">received_structure</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">received_state</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_value_securities</span><span class="p">(</span>
+                    <span class="n">security</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span>
+                    <span class="n">update_security_state</span><span class="o">=</span><span class="n">received_state</span><span class="p">,</span>
+                    <span class="n">exchange_fees</span><span class="o">=</span><span class="n">received_state</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate_sim_exchange_fee</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">dtime</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtime_now</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dtime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_history</span><span class="p">(</span><span class="n">dtime</span><span class="p">,</span> <span class="n">current_structure</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">received_structure</span><span class="p">),</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Portfolio.log_history"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.log_history">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">log_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">timestamp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                          <span class="n">current_structure</span><span class="p">:</span> <span class="n">Securities</span><span class="p">,</span>
+                          <span class="n">received_structure</span><span class="p">:</span> <span class="n">Securities</span><span class="p">,</span>
+                          <span class="n">new_structure</span><span class="p">:</span> <span class="n">Securities</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        После покупки логирует историю.</span>
+
+<span class="sd">        :param timestamp: время совершения сделки. Формат &#39;%Y-%m-%d %H:%M:%S&#39; или &#39;%Y-%m-%d&#39;</span>
+<span class="sd">        :param current_structure: текущее состояние портфеля</span>
+<span class="sd">        :param received_structure: полученное состояние портфеля</span>
+<span class="sd">        :param new_structure: обновленное состояние портфеля</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_full_balance</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="o">.</span><span class="n">log_history</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__full_balance</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="p">,</span>
+            <span class="n">current_structure</span><span class="p">,</span>
+            <span class="n">received_structure</span><span class="p">,</span>
+            <span class="n">new_structure</span>
+        <span class="p">)</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_update_value_securities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                       <span class="n">security</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                       <span class="n">update_security_state</span><span class="p">:</span> <span class="n">SecurityState</span><span class="p">,</span>
+                                       <span class="n">exchange_fees</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Обновляет количество бумаг в портфеле и считает финансовый эффект, потом обновляет баланс</span>
+
+<span class="sd">        :param security: имя бумаги;</span>
+<span class="sd">        :param update_security_state: купленное / проданное количество бумаг и их стоимость;</span>
+<span class="sd">        :param exchange_fees: комиссия за сделку с этой бумагой;</span>
+<span class="sd">        :return: обновляет состояние портфеля и ничего не возвращает</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span><span class="p">[</span><span class="n">security</span><span class="p">]</span> <span class="o">-=</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span>
+
+        <span class="n">cur_state</span><span class="p">:</span> <span class="n">SecurityState</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">])</span>
+        <span class="c1"># Если мы докупаем бумаги, то их количество увеличивается, и цена взвешивается. Баланс просто уменьшается</span>
+
+        <span class="c1"># Мы без бумаг или в длинной позиции</span>
+        <span class="k">if</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Покупаем бумаги</span>
+            <span class="k">if</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_same_directional_update</span><span class="p">(</span><span class="n">security</span><span class="p">,</span> <span class="n">update_security_state</span><span class="p">)</span>
+
+            <span class="c1"># Продаем бумаги</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_different_directional_update</span><span class="p">(</span><span class="n">security</span><span class="p">,</span> <span class="n">update_security_state</span><span class="p">)</span>
+
+        <span class="c1"># Короткая позиция уже открыта</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Покупаем бумаги</span>
+            <span class="k">if</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_different_directional_update</span><span class="p">(</span><span class="n">security</span><span class="p">,</span> <span class="n">update_security_state</span><span class="p">)</span>
+
+            <span class="c1"># Продаем бумаги</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_same_directional_update</span><span class="p">(</span><span class="n">security</span><span class="p">,</span> <span class="n">update_security_state</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span> <span class="o">-=</span> <span class="n">exchange_fees</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_full_balance</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Portfolio.calc_amount"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.calc_amount">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">calc_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy_response</span><span class="p">:</span> <span class="n">StrategyResponse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Вычисляет количество бумаг для покупки / продажи</span>
+
+<span class="sd">        :param strategy_response: ответ стратегии;</span>
+<span class="sd">        :return: количество бумаг для покупки</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">type_action</span> <span class="o">==</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_amount_buy</span><span class="p">(</span><span class="n">strategy_response</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">type_action</span> <span class="o">==</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_amount_sell</span><span class="p">(</span><span class="n">strategy_response</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Portfolio.calc_amount_buy"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.calc_amount_buy">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">calc_amount_buy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy_response</span><span class="p">:</span> <span class="n">StrategyResponse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Расчет количества свободных денег для покупки</span>
+
+<span class="sd">        :param strategy_response: ответ от стратегии на покупку;</span>
+<span class="sd">        :return: количество свободных денег</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">amt_money_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span>
+        <span class="n">amt_money_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="k">if</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">quantity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">price</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">price</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_security_history_aiomoex</span><span class="p">(</span>
+                    <span class="n">DataRequest</span><span class="p">(</span>
+                        <span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">],</span>
+                        <span class="n">dt_start</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">,</span>
+                        <span class="n">dt_end</span><span class="o">=</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">)</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+                        <span class="n">dt_frequency</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">price</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;ok&#39;</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">price</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="mi">0</span>
+                <span class="n">price</span> <span class="o">=</span> <span class="n">price</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">price</span> <span class="o">=</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">price</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flg_end_process</span><span class="p">:</span>
+                <span class="n">amt_money_2</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span> <span class="o">+</span> <span class="n">price</span> <span class="o">*</span> <span class="mf">0.99</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">amt_money_2</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">amt_money_1</span><span class="p">,</span> <span class="n">amt_money_2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Portfolio.calc_amount_sell"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.calc_amount_sell">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">calc_amount_sell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy_response</span><span class="p">:</span> <span class="n">StrategyResponse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Расчет количества бумаг для продажи</span>
+
+<span class="sd">        :param strategy_response: ответ от стратегии на продажу;</span>
+<span class="sd">        :return: количество бумаг</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">avail_amt</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">price</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">price</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_security_history_aiomoex</span><span class="p">(</span>
+                <span class="n">DataRequest</span><span class="p">(</span>
+                    <span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">],</span>
+                    <span class="n">dt_start</span><span class="o">=</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">,</span>
+                    <span class="n">dt_end</span><span class="o">=</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">)</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+                    <span class="n">dt_frequency</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">price</span> <span class="o">=</span> <span class="n">price</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">price</span> <span class="o">=</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">price</span>
+
+        <span class="k">if</span> <span class="n">strategy_response</span><span class="o">.</span><span class="n">quantity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">quantity</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span>  <span class="c1"># Количество бумаг для продажи</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span> <span class="o">/</span> <span class="n">price</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="c1"># разница между количеством бумаг и количеством бумаг, которое нужно продать</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span> <span class="o">-</span> <span class="n">quantity</span>
+
+            <span class="c1"># Если у нас есть бумаги, причем продаем не больше чем имеем</span>
+            <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">avail_amt</span> <span class="o">+=</span> <span class="n">quantity</span> <span class="o">*</span> <span class="n">price</span>
+
+            <span class="c1"># Если у нас есть бумаги, но мы хотим продать больше чем есть, то мы можем продать все бумаги</span>
+            <span class="c1"># и продать еще на сумму, ограниченную свободным балансом * плечом</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">avail_amt</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span> <span class="o">*</span> <span class="n">price</span>
+                <span class="n">avail_amt</span> <span class="o">+=</span> <span class="nb">min</span><span class="p">(</span>
+                    <span class="o">-</span><span class="n">delta</span> <span class="o">*</span> <span class="n">price</span><span class="p">,</span>  <span class="c1"># Сумма, на которую мы хотим продать.</span>
+                    <span class="c1"># Крышка - максимальная сумма, на которую мы можем продать</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__max_leverage</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># self.__securities[strategy_response.ticker].quantity &lt; 0</span>
+            <span class="n">avail_amt</span> <span class="o">+=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">quantity</span> <span class="o">*</span> <span class="n">price</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span><span class="p">[</span><span class="n">strategy_response</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__max_leverage</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flg_end_process</span><span class="p">:</span>
+            <span class="n">avail_amt</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">avail_amt</span><span class="p">)</span> <span class="o">+</span> <span class="n">price</span> <span class="o">*</span> <span class="mf">0.99</span>
+
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">avail_amt</span><span class="p">)</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_same_directional_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                       <span class="n">security</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                       <span class="n">update_security_state</span><span class="p">:</span> <span class="n">SecurityState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Покупка бумаг в длинной (или без бумаг) или продажа в короткой. То есть количество имеющихся бумаг сейчас</span>
+<span class="sd">        того же знака, что текущая операция по бумагам.</span>
+
+<span class="sd">        :param security: имя бумаги;</span>
+<span class="sd">        :param update_security_state: купленное количество бумаг и их стоимость;</span>
+<span class="sd">        :return: обновляет состояние портфеля и ничего не возвращает</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cur_state</span><span class="p">:</span> <span class="n">SecurityState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># обновляем количество</span>
+        <span class="n">new_quantity</span> <span class="o">=</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">+</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span>
+
+        <span class="c1"># обновляем цену бумаги в портфеле</span>
+        <span class="n">new_price</span> <span class="o">=</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span> <span class="o">+</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">+</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">new_price</span> <span class="o">/=</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">+</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_price</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># обновляем баланс и состояние по бумаге</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span> <span class="o">-=</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">new_quantity</span><span class="p">,</span> <span class="n">new_price</span><span class="p">,</span>
+                                                 <span class="n">update_security_state</span><span class="o">.</span><span class="n">stop_loss</span><span class="p">,</span>
+                                                 <span class="n">update_security_state</span><span class="o">.</span><span class="n">take_profit</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_full_balance</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_different_directional_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                            <span class="n">security</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                            <span class="n">update_security_state</span><span class="p">:</span> <span class="n">SecurityState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Продажа бумаг в длинной позиции или покупка в короткой.</span>
+
+<span class="sd">        :param security: имя бумаги;</span>
+<span class="sd">        :param update_security_state: проданное количество бумаг и их стоимость;</span>
+<span class="sd">        :return: обновляет состояние портфеля и ничего не возвращает</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cur_state</span><span class="p">:</span> <span class="n">SecurityState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span>
+
+        <span class="c1"># обновляем количество, если продали или купили не больше текущей позиции</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span><span class="p">):</span>
+            <span class="n">new_quantity</span> <span class="o">=</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">+</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span>
+            <span class="n">new_price</span> <span class="o">=</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">price</span>
+
+        <span class="c1"># все продали / купили и вышли в другую позицию</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_quantity</span> <span class="o">=</span> <span class="n">cur_state</span><span class="o">.</span><span class="n">quantity</span> <span class="o">+</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">quantity</span>
+            <span class="n">new_price</span> <span class="o">=</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">price</span>
+
+        <span class="c1"># обновляем баланс</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__free_balance</span> <span class="o">-=</span> <span class="n">update_security_state</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">new_quantity</span><span class="p">,</span> <span class="n">new_price</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_full_balance</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Portfolio.sell_all"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.sell_all">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">sell_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtime_now</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Продать все имеющиеся бумаги</span>
+
+<span class="sd">        :param dtime_now: текущее время;</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flg_end_process</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">sell</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">security</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">:</span>
+            <span class="n">pseudo_strategy_response</span> <span class="o">=</span> <span class="n">StrategyResponse</span><span class="p">(</span>
+                <span class="n">ticker</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
+                <span class="n">type_action</span><span class="o">=</span><span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span>
+                <span class="n">quantity</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span><span class="p">),</span>
+                <span class="n">dtime_now</span><span class="o">=</span><span class="n">dtime_now</span>
+            <span class="p">)</span>
+            <span class="n">sell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pseudo_strategy_response</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_securities</span><span class="p">(</span><span class="o">*</span><span class="n">sell</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Portfolio.check_st_tp"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.check_st_tp">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">check_st_tp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Проверяет стоп-лосс и тейк профит</span>
+
+<span class="sd">        :return: продает или покупает бумаги</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sell</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">security</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">stop_loss</span><span class="p">:</span>
+                        <span class="n">sell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">StrategyResponse</span><span class="p">(</span>
+                            <span class="n">ticker</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
+                            <span class="n">type_action</span><span class="o">=</span><span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span><span class="p">,</span>
+                            <span class="n">quantity</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span><span class="p">),</span>
+                            <span class="n">dtime_now</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+                        <span class="p">))</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">take_profit</span><span class="p">:</span>
+                        <span class="n">sell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">StrategyResponse</span><span class="p">(</span>
+                            <span class="n">ticker</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
+                            <span class="n">type_action</span><span class="o">=</span><span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span><span class="p">,</span>
+                            <span class="n">quantity</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span><span class="p">),</span>
+                            <span class="n">dtime_now</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+                        <span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">stop_loss</span><span class="p">:</span>
+                        <span class="n">sell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">StrategyResponse</span><span class="p">(</span>
+                            <span class="n">ticker</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
+                            <span class="n">type_action</span><span class="o">=</span><span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span>
+                            <span class="n">quantity</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span><span class="p">),</span>
+                            <span class="n">dtime_now</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+                        <span class="p">))</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">take_profit</span><span class="p">:</span>
+                        <span class="n">sell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">StrategyResponse</span><span class="p">(</span>
+                            <span class="n">ticker</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
+                            <span class="n">type_action</span><span class="o">=</span><span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span>
+                            <span class="n">quantity</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__securities</span><span class="p">[</span><span class="n">security</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span><span class="p">),</span>
+                            <span class="n">dtime_now</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+                        <span class="p">))</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_securities</span><span class="p">(</span><span class="o">*</span><span class="n">sell</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Portfolio.call_strategy"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_portfolio.Portfolio.call_strategy">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">call_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">StrategyResponse</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Вызывает стратегию</span>
+
+<span class="sd">        :param dtime_now: текущее время;</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">resps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># проверим что не выходной</span>
+            <span class="n">price</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_security_history_aiomoex</span><span class="p">(</span><span class="n">DataRequest</span><span class="p">(</span>
+                <span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">ticker</span><span class="p">],</span>
+                <span class="n">dt_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">st_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                <span class="n">dt_end</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="s1">&#39;1d&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                <span class="n">dt_frequency</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span>
+            <span class="p">))</span>
+            <span class="k">if</span> <span class="n">price</span><span class="p">[</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;ok&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">price</span><span class="p">[</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="n">prices</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_security_history_aiomoex</span><span class="p">(</span><span class="n">DataRequest</span><span class="p">(</span>
+                        <span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">ticker</span><span class="p">],</span>
+                        <span class="n">dt_end</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="s1">&#39;1D&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                        <span class="n">dt_start</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="s1">&#39;50D&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                        <span class="n">dt_frequency</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span>
+                    <span class="p">))</span>
+                    <span class="n">st_response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="p">(</span><span class="n">prices</span><span class="p">[</span><span class="n">ticker</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">,</span> <span class="n">ticker</span><span class="o">=</span><span class="n">ticker</span><span class="p">)</span>
+                    <span class="n">st_response</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">st_time</span><span class="p">,</span> <span class="n">st_response</span><span class="p">)</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_securities</span><span class="p">(</span><span class="n">st_response</span><span class="p">)</span>
+                    <span class="n">resps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">st_response</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_st_tp</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">st_time</span> <span class="o">&gt;=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flg_end_process</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">resps</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">asyncio</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+    <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+    <span class="n">port</span> <span class="o">=</span> <span class="n">Portfolio</span><span class="p">(</span><span class="n">init_balance</span><span class="o">=</span><span class="mi">100_000</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">get_decision_macd_conservative_strategy</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">port</span><span class="o">.</span><span class="n">call_strategy</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;время подождем : </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="c1"># print(port.securities, port.free_balance, port.available_structure)</span>
+    <span class="c1"># i = 0</span>
+    <span class="c1"># for i in tqdm(range(2)):</span>
+    <span class="c1">#     asyncio.run(port.update_securities(</span>
+    <span class="c1">#         *[StrategyResponse(ticker=ticker, type_action=TypeAction.SELL, quantity=20,</span>
+    <span class="c1">#                            dtime_now=(pd.Timestamp(&#39;2022-12-20 11:00:00&#39;) + pd.Timedelta(days=i)</span>
+    <span class="c1">#                                       ).strftime(&#39;%Y-%m-%d %H:%M:%S&#39;), stop_loss=100, take_profit=200)</span>
+    <span class="c1">#           for ticker in MOEX_RUSSIA_INDEX_TICKERS]</span>
+    <span class="c1">#     ))</span>
+    <span class="c1">#     print(port.securities)</span>
+    <span class="c1">#     asyncio.run(port.check_st_tp())</span>
+    <span class="c1">#</span>
+    <span class="c1"># asyncio.run(port.sell_all(dtime_now=(pd.Timestamp(&#39;2022-12-20 11:00:00&#39;) + pd.Timedelta(days=i + 1)</span>
+    <span class="c1">#                                      ).strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)))</span>
+    <span class="c1">#</span>
+    <span class="c1"># print(port.free_balance, port.full_balance, port.securities)</span>
+    <span class="c1"># print(port.history)</span>
+    <span class="c1"># print(port.available_structure)</span>
+    <span class="c1"># print(port.securities)</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, barbarich vi, taranenko gs, tsoi as, burkina es.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

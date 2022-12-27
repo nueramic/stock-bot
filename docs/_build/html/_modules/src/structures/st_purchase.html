@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>src.structures.st_purchase</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+          <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/katex-math.css" type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script src="../../../_static/katex.min.js"></script>
+        <script src="../../../_static/auto-render.min.js"></script>
+        <script src="../../../_static/katex_autorenderer.js"></script>
+        <script src="../../../_static/require.min.js"></script>
+        <script src="../../../_static/custom.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">stock-bot-gav</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#welcome-to-stock-bot-gav-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../index.html" class="reference internal ">Welcome to stock-bot-gav’s documentation!</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">stock-bot</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../src.structures.html" class="reference internal ">src.structures package</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>src.structures.st_purchase</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for src.structures.st_purchase</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">src.parse_securities.async_moex</span> <span class="kn">import</span> <span class="n">get_security_history_aiomoex</span>
+<span class="kn">from</span> <span class="nn">src.structures.st_strategies</span> <span class="kn">import</span> <span class="n">DataRequest</span><span class="p">,</span> <span class="n">TypeAction</span>
+
+
+<div class="viewcode-block" id="DataMessage"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.DataMessage">[docs]</a><span class="k">class</span> <span class="nc">DataMessage</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс, в котором определена структура сообщения с данными.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataMessage.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.DataMessage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">message_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Конструктор класса</span>
+
+<span class="sd">        :param message_code: флаг. 0 - все окей данные есть. 1 - данных нет, так как скорее всего торги не ведутся.</span>
+<span class="sd">                    2 - тикер не найден;</span>
+<span class="sd">        :param message_text: сообщение</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_code</span> <span class="o">=</span> <span class="n">message_code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_text</span> <span class="o">=</span> <span class="n">message_text</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;DataMessage(flg=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message_code</span><span class="si">}</span><span class="s2">, message=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message_text</span><span class="si">}</span><span class="s2">&#39;)&quot;</span></div>
+
+
+<div class="viewcode-block" id="StockPurchaseRequest"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseRequest">[docs]</a><span class="k">class</span> <span class="nc">StockPurchaseRequest</span><span class="p">:</span>
+
+<div class="viewcode-block" id="StockPurchaseRequest.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseRequest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">type_action</span><span class="p">:</span> <span class="n">TypeAction</span><span class="p">,</span>
+                 <span class="n">amt_assets</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dtime_now</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param ticker: тикер инструмента;</span>
+<span class="sd">        :param type_action: тип операции. 0 - ничего, -1 - продажа, 1 - покупка;</span>
+<span class="sd">        :param amt_assets: сумма, которая доступна к покупке. Должна быть указана в валюте покупки;</span>
+<span class="sd">        :param price: цена, за которую нужно купить. Если None, то покупка по рыночной цене;</span>
+<span class="sd">        :param dtime_now: дата и время, когда был совершен запрос на покупку. Если None, то текущее время.</span>
+<span class="sd">                          Для симуляций необходимо указывать дату и время, когда был совершен запрос на покупку.</span>
+<span class="sd">                          Дата-время должны быть в формате &#39;%Y-%m-%d %H:%M:%S&#39; или &#39;%Y-%m-%d&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type_action</span> <span class="o">=</span> <span class="n">type_action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amt_assets</span> <span class="o">=</span> <span class="n">amt_assets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtime_now</span> <span class="o">=</span> <span class="n">dtime_now</span> <span class="k">if</span> <span class="n">dtime_now</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StockPurchaseRequest.get_state"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseRequest.get_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; StockPurchaseRequest(&#39;sBer&#39;, TypeAction.BUY, amt_assets=100, dtime_now=&#39;2022-12-17&#39;).get_state()</span>
+<span class="sd">            {&#39;ticker&#39;: &#39;SBER&#39;, &#39;type_action&#39;: 1, &#39;price&#39;: None, &#39;amt_assets&#39;: 100, &#39;dtime_now&#39;: &#39;2022-12-17&#39;}</span>
+
+<span class="sd">        :return: Возвращает словарь с информацией о покупке</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="StockPurchaseResponse"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseResponse">[docs]</a><span class="k">class</span> <span class="nc">StockPurchaseResponse</span><span class="p">:</span>
+
+<div class="viewcode-block" id="StockPurchaseResponse.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseResponse.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">message</span><span class="p">:</span> <span class="n">DataMessage</span><span class="p">,</span>
+                 <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">market_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">lot_quantity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">dt_purchase</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">exchange_fee</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param message: код + сообщение о том, как прошла покупка;</span>
+<span class="sd">        :param ticker: Тикер бумаги</span>
+<span class="sd">        :param market_price: Актуальная цена бумаги на рынке</span>
+<span class="sd">        :param quantity: Количество купленных / проданных бумаг</span>
+<span class="sd">        :param lot_quantity: Количество лотов, которое было куплено / продано</span>
+<span class="sd">        :param dt_purchase: Дата и время покупки</span>
+<span class="sd">        :param exchange_fee: Комиссия брокера</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">market_price</span> <span class="o">=</span> <span class="n">market_price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span> <span class="o">=</span> <span class="n">quantity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lot_quantity</span> <span class="o">=</span> <span class="n">lot_quantity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exchange_fee</span> <span class="o">=</span> <span class="n">exchange_fee</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_purchase</span> <span class="o">=</span> <span class="n">dt_purchase</span> <span class="k">if</span> <span class="n">dt_purchase</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type_purchase</span> <span class="o">=</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span> <span class="k">if</span> <span class="n">quantity</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span> <span class="k">if</span> <span class="n">quantity</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">NOTHING</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Возвращает строку с информацией о покупке</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;StockPurchaseResponse(</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">message=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">ticker=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">market_price=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">market_price</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">quantity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">lot_quantity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lot_quantity</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">exchange_fee=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">exchange_fee</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">type_purchase=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">type_purchase</span><span class="si">}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="StockPurchaseProcessMoex"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseProcessMoex">[docs]</a><span class="k">class</span> <span class="nc">StockPurchaseProcessMoex</span><span class="p">:</span>
+
+<div class="viewcode-block" id="StockPurchaseProcessMoex.__init__"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseProcessMoex.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">purchase_requests</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockPurchaseRequest</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param purchase_requests: запросы от стратегии</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">purchase_requests</span> <span class="o">=</span> <span class="n">purchase_requests</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockPurchaseResponse</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Проводит процесс покупки и возращает StockPurchaseResponse. Нужно передать запросы на покупку.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_update</span><span class="p">()</span>
+        <span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">purchase_requests</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">req</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span>
+            <span class="n">quantity</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">num_lots</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">market_price</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ok&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">market_price</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+                <span class="n">calc_quantity</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_purchase_quantity</span><span class="p">(</span><span class="n">market_price</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">amt_assets</span><span class="p">)</span>
+                <span class="n">num_lots</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">calc_quantity</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lotsize&#39;</span><span class="p">])</span>
+                <span class="n">calc_quantity</span> <span class="o">=</span> <span class="n">num_lots</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lotsize&#39;</span><span class="p">]</span>  <span class="c1"># приводим к лотности</span>
+
+                <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">type_action</span> <span class="o">==</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">:</span>
+                    <span class="n">quantity</span> <span class="o">=</span> <span class="n">calc_quantity</span>
+
+                <span class="k">elif</span> <span class="n">req</span><span class="o">.</span><span class="n">type_action</span> <span class="o">==</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span><span class="p">:</span>
+                    <span class="n">quantity</span> <span class="o">=</span> <span class="o">-</span><span class="n">calc_quantity</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">quantity</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">StockPurchaseResponse</span><span class="p">(</span>
+                    <span class="n">message</span><span class="o">=</span><span class="p">(</span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_message</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+                    <span class="n">ticker</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span>
+                    <span class="n">market_price</span><span class="o">=</span><span class="n">market_price</span><span class="p">,</span>
+                    <span class="n">quantity</span><span class="o">=</span><span class="n">quantity</span><span class="p">,</span>
+                    <span class="n">lot_quantity</span><span class="o">=</span><span class="n">num_lots</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">responses</span>
+
+<div class="viewcode-block" id="StockPurchaseProcessMoex.generate_message"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseProcessMoex.generate_message">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">generate_message</span><span class="p">(</span><span class="n">moex_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataMessage</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Генерирует сообщение о покупке</span>
+
+<span class="sd">        :param moex_dict: словарь с информацией о покупке;</span>
+<span class="sd">        :return: код + сообщение о том, как прошла покупка</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">moex_dict</span><span class="p">[</span><span class="s1">&#39;ok&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">moex_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message_code</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">message_text</span> <span class="o">=</span> <span class="s1">&#39;данных нет, так как скорее всего торги не ведутся&#39;</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message_code</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">message_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message_code</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">message_text</span> <span class="o">=</span> <span class="n">moex_dict</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">DataMessage</span><span class="p">(</span><span class="n">message_code</span><span class="o">=</span><span class="n">message_code</span><span class="p">,</span> <span class="n">message_text</span><span class="o">=</span><span class="n">message_text</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StockPurchaseProcessMoex.calc_purchase_quantity"><a class="viewcode-back" href="../../../src.structures.html#src.structures.st_purchase.StockPurchaseProcessMoex.calc_purchase_quantity">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">calc_purchase_quantity</span><span class="p">(</span><span class="n">market_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">amt_assets</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Рассчитывает количество акций, которое можно купить на указанную сумму</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; import asyncio</span>
+<span class="sd">            &gt;&gt;&gt; asyncio.run(StockPurchaseProcessMoex.calc_purchase_quantity(market_price=100, amt_assets=1000))</span>
+<span class="sd">            10</span>
+<span class="sd">            &gt;&gt;&gt; asyncio.run(StockPurchaseProcessMoex.calc_purchase_quantity(market_price=100, amt_assets=90))</span>
+<span class="sd">            0</span>
+<span class="sd">            &gt;&gt;&gt; asyncio.run(StockPurchaseProcessMoex.calc_purchase_quantity(market_price=100, amt_assets=-1000))</span>
+<span class="sd">            10</span>
+
+<span class="sd">        :param market_price: цена акции;</span>
+<span class="sd">        :param amt_assets: сумма, которую можно потратить на покупку;</span>
+<span class="sd">        :return: словарь с информацией о покупке</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">amt_assets</span><span class="p">)</span> <span class="o">/</span> <span class="n">market_price</span><span class="p">)</span>  <span class="c1"># количество акций, которое можно купить / продать</span>
+        <span class="k">return</span> <span class="n">quantity</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_data_update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Обновляет данные о бумаге;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_request</span> <span class="o">=</span> <span class="n">DataRequest</span><span class="p">(</span>
+            <span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">strategy_request</span><span class="o">.</span><span class="n">ticker</span> <span class="k">for</span> <span class="n">strategy_request</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">purchase_requests</span><span class="p">],</span>
+            <span class="n">dt_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">purchase_requests</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">,</span>
+            <span class="n">dt_end</span><span class="o">=</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">purchase_requests</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtime_now</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">),</span>
+            <span class="n">dt_frequency</span><span class="o">=</span><span class="s1">&#39;1min&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_security_history_aiomoex</span><span class="p">(</span><span class="n">data_request</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># import doctest</span>
+    <span class="kn">import</span> <span class="nn">asyncio</span>
+
+    <span class="c1"># doctest.testmod()</span>
+
+    <span class="n">reqs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">StockPurchaseRequest</span><span class="p">(</span><span class="s1">&#39;sBer&#39;</span><span class="p">,</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">dtime_now</span><span class="o">=</span><span class="s1">&#39;2022-12-06 11:00:00&#39;</span><span class="p">),</span>
+        <span class="n">StockPurchaseRequest</span><span class="p">(</span><span class="s1">&#39;vtbr&#39;</span><span class="p">,</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">SELL</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">dtime_now</span><span class="o">=</span><span class="s1">&#39;2022-12-06 11:00:00&#39;</span><span class="p">),</span>
+        <span class="n">StockPurchaseRequest</span><span class="p">(</span><span class="s1">&#39;appl&#39;</span><span class="p">,</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">NOTHING</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dtime_now</span><span class="o">=</span><span class="s1">&#39;2022-12-06 11:00:00&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">process</span> <span class="o">=</span> <span class="n">StockPurchaseProcessMoex</span><span class="p">(</span><span class="n">reqs</span><span class="p">)</span>
+    <span class="n">resps</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">process</span><span class="p">())</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">resps</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, barbarich vi, taranenko gs, tsoi as, burkina es.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

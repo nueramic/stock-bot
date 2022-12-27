@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+      <title>src.structures package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+          <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+          <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css" type="text/css" />
+          <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/katex.min.js"></script>
+        <script src="_static/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script src="_static/require.min.js"></script>
+        <script src="_static/custom.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="prev" title="src package" href="src.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">stock-bot-gav</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-stock-bot-gav-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="index.html" class="reference internal ">Welcome to stock-bot-gav’s documentation!</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">stock-bot</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">src.structures package</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#submodules" class="reference internal">Submodules</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-src.structures.st_portfolio" class="reference internal">src.structures.st_portfolio module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-src.structures.st_purchase" class="reference internal">src.structures.st_purchase module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-src.structures.st_securities" class="reference internal">src.structures.st_securities module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-src.structures.st_strategies" class="reference internal">src.structures.st_strategies module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-contents" class="reference internal">Module contents</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="modules.html">stock-bot</a> &raquo;</li>
+    
+      <li><a href="src.html">src package</a> &raquo;</li>
+    
+    <li>src.structures package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="src.html"
+       title="previous chapter">← src package</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="src-structures-package">
+<h1>src.structures package<a class="headerlink" href="#src-structures-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-src.structures.st_portfolio">
+<span id="src-structures-st-portfolio-module"></span><h2>src.structures.st_portfolio module<a class="headerlink" href="#module-src.structures.st_portfolio" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Portfolio</span></span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_balance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tickers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sim'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Инициализация портфеля</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_balance</strong> (<em>[</em><em>&lt;class 'int'&gt;</em><em>, </em><em>&lt;class 'float'&gt;</em><em>]</em>) – начальный баланс портфеля;</p></li>
+<li><p><strong>tickers</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>str</em><em>]</em><em>]</em>) – список тикеров акций, которые будут входить в портфель. Если не указан, то портфель будет
+состоять из всех акций moex russia index;</p></li>
+<li><p><strong>weights</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – веса акций в портфеле. Если не указаны, то все акции будут иметь одинаковый вес;</p></li>
+<li><p><strong>strategy</strong> (<em>Optional</em><em>[</em><em>callable</em><em>]</em>) – стратегия, которая будет использоваться для обновления портфеля.</p></li>
+<li><p><strong>type_process</strong> (<em>str</em>) – тип процесса, в котором работает портфель. Может быть ‘sim’ или ‘real’, соответственно
+симуляция или реальный процесс</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.calc_amount">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_amount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy_response</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.calc_amount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.calc_amount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Вычисляет количество бумаг для покупки / продажи</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>strategy_response</strong> (<a class="reference internal" href="#src.structures.st_strategies.StrategyResponse" title="src.structures.st_strategies.StrategyResponse"><em>StrategyResponse</em></a>) – ответ стратегии;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>количество бумаг для покупки</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.calc_amount_buy">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_amount_buy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy_response</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.calc_amount_buy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.calc_amount_buy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Расчет количества свободных денег для покупки</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>strategy_response</strong> (<a class="reference internal" href="#src.structures.st_strategies.StrategyResponse" title="src.structures.st_strategies.StrategyResponse"><em>StrategyResponse</em></a>) – ответ от стратегии на покупку;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>количество свободных денег</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.calc_amount_sell">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_amount_sell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy_response</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.calc_amount_sell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.calc_amount_sell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Расчет количества бумаг для продажи</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>strategy_response</strong> (<a class="reference internal" href="#src.structures.st_strategies.StrategyResponse" title="src.structures.st_strategies.StrategyResponse"><em>StrategyResponse</em></a>) – ответ от стратегии на продажу;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>количество бумаг</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.calc_shares">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_shares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tickers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.calc_shares"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.calc_shares" title="Permalink to this definition">¶</a></dt>
+<dd><p>Расчет весов акций по ковариации</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tickers</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – датафрейм с ценами закрытия акций;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>вектор весов акций</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.call_strategy">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">call_strategy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.call_strategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.call_strategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Вызывает стратегию</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dtime_now</strong> – текущее время;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[&lt;class ‘src.structures.st_strategies.StrategyResponse’&gt;]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.check_st_tp">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_st_tp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.check_st_tp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.check_st_tp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Проверяет стоп-лосс и тейк профит</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>продает или покупает бумаги</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.free_balance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">free_balance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.free_balance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.full_balance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">full_balance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.full_balance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.history">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">history</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.log_history">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">received_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_structure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.log_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.log_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>После покупки логирует историю.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> (<em>str</em>) – время совершения сделки. Формат ‘%Y-%m-%d %H:%M:%S’ или ‘%Y-%m-%d’</p></li>
+<li><p><strong>current_structure</strong> (<a class="reference internal" href="#src.structures.st_portfolio.Securities" title="src.structures.st_portfolio.Securities"><em>Securities</em></a>) – текущее состояние портфеля</p></li>
+<li><p><strong>received_structure</strong> (<a class="reference internal" href="#src.structures.st_portfolio.Securities" title="src.structures.st_portfolio.Securities"><em>Securities</em></a>) – полученное состояние портфеля</p></li>
+<li><p><strong>new_structure</strong> (<a class="reference internal" href="#src.structures.st_portfolio.Securities" title="src.structures.st_portfolio.Securities"><em>Securities</em></a>) – обновленное состояние портфеля</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.securities">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">securities</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.securities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.sell_all">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sell_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtime_now</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.sell_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.sell_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Продать все имеющиеся бумаги</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dtime_now</strong> (<em>str</em>) – текущее время;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.type_process">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type_process</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.type_process" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Portfolio.update_securities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_securities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Portfolio.update_securities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Portfolio.update_securities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Обновляет бумаги в портфеле.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<a class="reference internal" href="#src.structures.st_strategies.StrategyResponse" title="src.structures.st_strategies.StrategyResponse"><em>StrategyResponse</em></a>) – Если позиция короткая, то количество отрицательное.
+Если бумаги были проданы или куплены количество соответственно положительное или отрицательное.
+После обновления цена будет перевзвешена в соответствии с количеством. Если мы стоим в короткой
+позиции, то покупка просто сократит количество бумаг, а на баланс может поступить положительная
+разница, при ее наличии. Если в короткой позиции мы продаем бумаги, то их цена перевзвешивается;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>обновляет внутренний портфель</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.PortfolioHistory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PortfolioHistory</span></span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#PortfolioHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.PortfolioHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.PortfolioHistory.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#PortfolioHistory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.PortfolioHistory.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор класса, отвечающего за историю по портфелю</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.PortfolioHistory.get_history">
+<span class="sig-name descname"><span class="pre">get_history</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#PortfolioHistory.get_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.PortfolioHistory.get_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.PortfolioHistory.log_history">
+<span class="sig-name descname"><span class="pre">log_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">received_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_structure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#PortfolioHistory.log_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.PortfolioHistory.log_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Логирование состояния портфеля</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>balance</strong> (<em>[</em><em>&lt;class 'float'&gt;</em><em>, </em><em>&lt;class 'int'&gt;</em><em>]</em>) – новый баланс портфеля</p></li>
+<li><p><strong>timestamp</strong> (<em>str</em>) – дата и    время изменения</p></li>
+<li><p><strong>current_structure</strong> (<a class="reference internal" href="#src.structures.st_portfolio.Securities" title="src.structures.st_portfolio.Securities"><em>Securities</em></a>) – текущее состояние портфеля</p></li>
+<li><p><strong>received_structure</strong> (<a class="reference internal" href="#src.structures.st_portfolio.Securities" title="src.structures.st_portfolio.Securities"><em>Securities</em></a>) – полученное состояние портфеля</p></li>
+<li><p><strong>new_structure</strong> (<a class="reference internal" href="#src.structures.st_portfolio.Securities" title="src.structures.st_portfolio.Securities"><em>Securities</em></a>) – обновленное состояние портфеля</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>только обновляет историю</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Securities">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Securities</span></span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Securities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Securities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">defaultdict</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_portfolio.Securities.get_json">
+<span class="sig-name descname"><span class="pre">get_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_portfolio.html#Securities.get_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_portfolio.Securities.get_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.structures.st_purchase">
+<span id="src-structures-st-purchase-module"></span><h2>src.structures.st_purchase module<a class="headerlink" href="#module-src.structures.st_purchase" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_purchase.DataMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataMessage</span></span><a class="reference internal" href="_modules/src/structures/st_purchase.html#DataMessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.DataMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Класс, в котором определена структура сообщения с данными.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.DataMessage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#DataMessage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.DataMessage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор класса</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_code</strong> (<em>int</em>) – флаг. 0 - все окей данные есть. 1 - данных нет, так как скорее всего торги не ведутся.
+2 - тикер не найден;</p></li>
+<li><p><strong>message_text</strong> (<em>str</em>) – сообщение</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseProcessMoex">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StockPurchaseProcessMoex</span></span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseProcessMoex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseProcessMoex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseProcessMoex.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">purchase_requests</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseProcessMoex.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseProcessMoex.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>purchase_requests</strong> (<em>list</em><em>[</em><a class="reference internal" href="#src.structures.st_purchase.StockPurchaseRequest" title="src.structures.st_purchase.StockPurchaseRequest"><em>src.structures.st_purchase.StockPurchaseRequest</em></a><em>]</em>) – запросы от стратегии</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseProcessMoex.calc_purchase_quantity">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_purchase_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market_price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amt_assets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseProcessMoex.calc_purchase_quantity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseProcessMoex.calc_purchase_quantity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Рассчитывает количество акций, которое можно купить на указанную сумму</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">StockPurchaseProcessMoex</span><span class="o">.</span><span class="n">calc_purchase_quantity</span><span class="p">(</span><span class="n">market_price</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">amt_assets</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">StockPurchaseProcessMoex</span><span class="o">.</span><span class="n">calc_purchase_quantity</span><span class="p">(</span><span class="n">market_price</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">amt_assets</span><span class="o">=</span><span class="mi">90</span><span class="p">))</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">StockPurchaseProcessMoex</span><span class="o">.</span><span class="n">calc_purchase_quantity</span><span class="p">(</span><span class="n">market_price</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">amt_assets</span><span class="o">=-</span><span class="mi">1000</span><span class="p">))</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>market_price</strong> (<em>float</em>) – цена акции;</p></li>
+<li><p><strong>amt_assets</strong> (<em>float</em>) – сумма, которую можно потратить на покупку;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>словарь с информацией о покупке</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseProcessMoex.generate_message">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">moex_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseProcessMoex.generate_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseProcessMoex.generate_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Генерирует сообщение о покупке</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>moex_dict</strong> (<em>dict</em>) – словарь с информацией о покупке;</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>код + сообщение о том, как прошла покупка</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.structures.st_purchase.DataMessage" title="src.structures.st_purchase.DataMessage"><em>DataMessage</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StockPurchaseRequest</span></span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseRequest.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amt_assets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtime_now</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseRequest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseRequest.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<em>str</em>) – тикер инструмента;</p></li>
+<li><p><strong>type_action</strong> (<a class="reference internal" href="#src.structures.st_strategies.TypeAction" title="src.structures.st_strategies.TypeAction"><em>TypeAction</em></a>) – тип операции. 0 - ничего, -1 - продажа, 1 - покупка;</p></li>
+<li><p><strong>amt_assets</strong> (<em>float</em>) – сумма, которая доступна к покупке. Должна быть указана в валюте покупки;</p></li>
+<li><p><strong>price</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – цена, за которую нужно купить. Если None, то покупка по рыночной цене;</p></li>
+<li><p><strong>dtime_now</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – дата и время, когда был совершен запрос на покупку. Если None, то текущее время.
+Для симуляций необходимо указывать дату и время, когда был совершен запрос на покупку.
+Дата-время должны быть в формате ‘%Y-%m-%d %H:%M:%S’ или ‘%Y-%m-%d’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseRequest.get_state">
+<span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseRequest.get_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseRequest.get_state" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">StockPurchaseRequest</span><span class="p">(</span><span class="s1">&#39;sBer&#39;</span><span class="p">,</span> <span class="n">TypeAction</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span> <span class="n">amt_assets</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dtime_now</span><span class="o">=</span><span class="s1">&#39;2022-12-17&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+<span class="go">{&#39;ticker&#39;: &#39;SBER&#39;, &#39;type_action&#39;: 1, &#39;price&#39;: None, &#39;amt_assets&#39;: 100, &#39;dtime_now&#39;: &#39;2022-12-17&#39;}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Возвращает словарь с информацией о покупке</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StockPurchaseResponse</span></span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_purchase.StockPurchaseResponse.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">market_price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lot_quantity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_purchase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exchange_fee</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_purchase.html#StockPurchaseResponse.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_purchase.StockPurchaseResponse.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<a class="reference internal" href="#src.structures.st_purchase.DataMessage" title="src.structures.st_purchase.DataMessage"><em>DataMessage</em></a>) – код + сообщение о том, как прошла покупка;</p></li>
+<li><p><strong>ticker</strong> (<em>str</em>) – Тикер бумаги</p></li>
+<li><p><strong>market_price</strong> (<em>float</em>) – Актуальная цена бумаги на рынке</p></li>
+<li><p><strong>quantity</strong> (<em>int</em>) – Количество купленных / проданных бумаг</p></li>
+<li><p><strong>lot_quantity</strong> (<em>int</em>) – Количество лотов, которое было куплено / продано</p></li>
+<li><p><strong>dt_purchase</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Дата и время покупки</p></li>
+<li><p><strong>exchange_fee</strong> (<em>float</em>) – Комиссия брокера</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.structures.st_securities">
+<span id="src-structures-st-securities-module"></span><h2>src.structures.st_securities module<a class="headerlink" href="#module-src.structures.st_securities" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_securities.InfoSecurityRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InfoSecurityRequest</span></span><a class="reference internal" href="_modules/src/structures/st_securities.html#InfoSecurityRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.InfoSecurityRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_securities.InfoSecurityRequest.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_securities.html#InfoSecurityRequest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.InfoSecurityRequest.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор класса для запроса данных с биржи.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<em>str</em>) – название бумаги;</p></li>
+<li><p><strong>start</strong> (<em>str</em>) – дата начала запроса;</p></li>
+<li><p><strong>end</strong> (<em>str</em>) – дата конца запроса;</p></li>
+<li><p><strong>time_step</strong> (<em>str</em>) – биржевой тик;</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – список столбцов</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_securities.SecurityState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SecurityState</span></span><a class="reference internal" href="_modules/src/structures/st_securities.html#SecurityState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.SecurityState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_securities.SecurityState.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">take_profit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_securities.html#SecurityState.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.SecurityState.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор класса, который будет хранить состояние конкретной бумаги.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Стоп лосс и тейк профит пока исполняют заявку по бумаге в полном объеме</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>quantity</strong> (<em>int</em>) – количество актива;</p></li>
+<li><p><strong>stop_loss</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Цена с целью ограничить свои убытки;</p></li>
+<li><p><strong>take_profit</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Цена, при которой мы получаем таргетированную выгоду;</p></li>
+<li><p><strong>price</strong> (<em>float</em>) – цена актива</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_securities.SecurityState.security_value">
+<span class="sig-name descname"><span class="pre">security_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_securities.html#SecurityState.security_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.SecurityState.security_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Возвращает стоимость всех бумаг: quantity * price</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SecurityState</span><span class="p">(</span><span class="n">quantity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="mf">12.5</span><span class="p">)</span><span class="o">.</span><span class="n">security_value</span><span class="p">()</span>
+<span class="go">25.0</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>стоимость всех бумаг</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_securities.SecurityState.short_state">
+<span class="sig-name descname"><span class="pre">short_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_securities.html#SecurityState.short_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.SecurityState.short_state" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">security_state</span> <span class="o">=</span> <span class="n">SecurityState</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">security_state</span><span class="o">.</span><span class="n">short_state</span><span class="p">()</span>
+<span class="go">{&#39;quantity&#39;: 1, &#39;price&#39;: 2, &#39;sl&#39;: 3, &#39;tp&#39;: 4}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>возвращает состояние бумаги без ее истории. Не изменяет объект</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#src.structures.st_securities.SecurityState" title="src.structures.st_securities.SecurityState"><em>SecurityState</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_securities.SecurityState.update_state">
+<span class="sig-name descname"><span class="pre">update_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_price</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_securities.html#SecurityState.update_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.SecurityState.update_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Обновляет состояние бумаги</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">security_state</span> <span class="o">=</span> <span class="n">SecurityState</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">security_state</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">security_state</span>
+<span class="go">{&#39;quantity&#39;: 5, &#39;price&#39;: 6, &#39;sl&#39;: 3, &#39;tp&#39;: 4}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">security_state</span><span class="o">.</span><span class="n">history_security</span>
+<span class="go">[{&#39;quantity&#39;: 1, &#39;price&#39;: 2, &#39;sl&#39;: 3, &#39;tp&#39;: 4}, {&#39;quantity&#39;: 5, &#39;price&#39;: 6, &#39;sl&#39;: 3, &#39;tp&#39;: 4}]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_quantity</strong> (<em>int</em>) – количество актива;</p></li>
+<li><p><strong>new_price</strong> (<em>float</em>) – цена актива</p></li>
+<li><p><strong>sl</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Цена с целью ограничить свои убытки;</p></li>
+<li><p><strong>tp</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Цена, при которой мы получаем таргетированную выгоду;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_securities.StockSecurityPrice">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StockSecurityPrice</span></span><a class="reference internal" href="_modules/src/structures/st_securities.html#StockSecurityPrice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.StockSecurityPrice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_securities.StockSecurityPrice.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">market_price</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_securities.html#StockSecurityPrice.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_securities.StockSecurityPrice.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор класс рыночной цены по бумаге</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<em>str</em>) – тикер бумаги</p></li>
+<li><p><strong>market_price</strong> (<em>float</em>) – рыночная цена</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.structures.st_strategies">
+<span id="src-structures-st-strategies-module"></span><h2>src.structures.st_strategies module<a class="headerlink" href="#module-src.structures.st_strategies" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_strategies.BaseStrategy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseStrategy</span></span><a class="reference internal" href="_modules/src/structures/st_strategies.html#BaseStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.BaseStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Базовый класс стратегии. При создании экземпляра класса, в качестве аргументов передаются:
+Необходимые параметры для работы конкретной стратегии.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_strategies.BaseStrategy.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_strategies.html#BaseStrategy.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.BaseStrategy.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>kwargs</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_strategies.BaseStrategy.get_decision">
+<span class="sig-name descname"><span class="pre">get_decision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_strategies.html#BaseStrategy.get_decision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.BaseStrategy.get_decision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Метод, который возвращает решение стратегии.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>kwargs</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>StrategyResponse</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.structures.st_strategies.StrategyResponse" title="src.structures.st_strategies.StrategyResponse"><em>StrategyResponse</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_strategies.BaseStrategy.get_request">
+<span class="sig-name descname"><span class="pre">get_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_strategies.html#BaseStrategy.get_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.BaseStrategy.get_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Метод, который возвращает запрос стратегии.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>kwargs</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataRequest</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.structures.st_strategies.DataRequest" title="src.structures.st_strategies.DataRequest"><em>DataRequest</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_strategies.DataRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataRequest</span></span><a class="reference internal" href="_modules/src/structures/st_strategies.html#DataRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.DataRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_strategies.DataRequest.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tickers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('TRADEDATE',</span> <span class="pre">'CLOSE')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_strategies.html#DataRequest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.DataRequest.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор базового класса запроса стратегии.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tickers</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>str</em><em>]</em><em>]</em>) – список тикеров, для которых нужно получить данные</p></li>
+<li><p><strong>dt_start</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>Timestamp</em><em>, </em><em>str</em><em>]</em><em>]</em>) – дата и время начала периода</p></li>
+<li><p><strong>dt_end</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>Timestamp</em><em>, </em><em>str</em><em>]</em><em>]</em>) – дата и время конца периода</p></li>
+<li><p><strong>dt_frequency</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – частота данных</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – необходимые колонки, по умолчанию дата-время + цена закрытия</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_strategies.DataRequest.get_json">
+<span class="sig-name descname"><span class="pre">get_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_strategies.html#DataRequest.get_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.DataRequest.get_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Метод, который возвращает json-представление класса</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>json-представление класса</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_strategies.StrategyResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StrategyResponse</span></span><a class="reference internal" href="_modules/src/structures/st_strategies.html#StrategyResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.StrategyResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Класс, в котором определена общая структура ответа от стратегии</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.structures.st_strategies.StrategyResponse.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtime_now</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">take_profit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/structures/st_strategies.html#StrategyResponse.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.StrategyResponse.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Конструктор класса</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – название инструмента / стратегии</p></li>
+<li><p><strong>type_action</strong> (<a class="reference internal" href="#src.structures.st_strategies.TypeAction" title="src.structures.st_strategies.TypeAction"><em>TypeAction</em></a>) – флаг действия. 1 - покупка, -1 - продажа, 0 - ничего не делать</p></li>
+<li><p><strong>price</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – цена</p></li>
+<li><p><strong>quantity</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – количество акций</p></li>
+<li><p><strong>dtime_now</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – дата и время</p></li>
+<li><p><strong>stop_loss</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – стоп-лосс</p></li>
+<li><p><strong>take_profit</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – тейк-профит</p></li>
+<li><p><strong>comment</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – комментарий, описание действия, которое нужно совершить</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.structures.st_strategies.TypeAction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TypeAction</span></span><a class="reference internal" href="_modules/src/structures/st_strategies.html#TypeAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.structures.st_strategies.TypeAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Класс, в котором определены флаги действий</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.structures.st_strategies.TypeAction.BUY">
+<span class="sig-name descname"><span class="pre">BUY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#src.structures.st_strategies.TypeAction.BUY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.structures.st_strategies.TypeAction.NOTHING">
+<span class="sig-name descname"><span class="pre">NOTHING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#src.structures.st_strategies.TypeAction.NOTHING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.structures.st_strategies.TypeAction.SELL">
+<span class="sig-name descname"><span class="pre">SELL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#src.structures.st_strategies.TypeAction.SELL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="src.html"
+       title="previous chapter">← src package</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, barbarich vi, taranenko gs, tsoi as, burkina es.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
