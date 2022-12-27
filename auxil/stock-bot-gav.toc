@@ -1,0 +1,18 @@
+\selectlanguage *{english}
+\contentsline {chapter}{\numberline {1}stock\sphinxhyphen {}bot}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}simulation package}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Module contents}{1}{subsection.1.1.1}%
+\contentsline {section}{\numberline {1.2}src package}{1}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Subpackages}{1}{subsection.1.2.1}%
+\contentsline {subsubsection}{src.structures package}{1}{subsubsection*.3}%
+\contentsline {paragraph}{Submodules}{1}{paragraph*.4}%
+\contentsline {paragraph}{src.structures.st\_portfolio module}{1}{paragraph*.5}%
+\contentsline {paragraph}{src.structures.st\_purchase module}{4}{paragraph*.28}%
+\contentsline {paragraph}{src.structures.st\_securities module}{6}{paragraph*.40}%
+\contentsline {paragraph}{src.structures.st\_strategies module}{8}{paragraph*.50}%
+\contentsline {paragraph}{Module contents}{10}{paragraph*.64}%
+\contentsline {subsection}{\numberline {1.2.2}Submodules}{10}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}src.bot module}{10}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Module contents}{10}{subsection.1.2.4}%
+\contentsline {chapter}{\numberline {2}Indices and tables}{11}{chapter.2}%
+\contentsline {chapter}{Python Module Index}{13}{section*.65}%

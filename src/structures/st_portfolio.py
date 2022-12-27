@@ -527,7 +527,7 @@ class Portfolio:
                 pass
         await self.update_securities(*sell)
 
-    async def call_strategy(self) -> None:
+    async def call_strategy(self) -> [StrategyResponse]:
         """
         Вызывает стратегию
 
@@ -535,7 +535,7 @@ class Portfolio:
         :return: None
         """
         self.st_time = self.st_time + pd.Timedelta(days=1)
-
+        resps = []
         for ticker in self.available_structure.keys():
             # проверим что не выходной
             price = await get_security_history_aiomoex(DataRequest(
@@ -556,10 +556,12 @@ class Portfolio:
                     st_response.ticker = ticker
                     print(self.st_time, st_response)
                     await self.update_securities(st_response)
-
+                    resps.append(st_response)
         await self.check_st_tp()
         if self.st_time >= pd.Timestamp.now():
             self.flg_end_process = True
+
+        return resps
 
 
 if __name__ == '__main__':
@@ -571,7 +573,6 @@ if __name__ == '__main__':
     for i in range(30):
         try:
             asyncio.run(port.call_strategy())
-            print(port.full_balance, port.securities)
         except Exception as e:
             print(f'время подождем : {e}')
             sleep(5)

@@ -1,0 +1,142 @@
+\begin{theindex}
+
+  \item \spxentry{\_\_init\_\_()}\spxextra{BaseStrategy method}, 12
+  \item \spxentry{\_\_init\_\_()}\spxextra{DataMessage method}, 8
+  \item \spxentry{\_\_init\_\_()}\spxextra{DataRequest method}, 12
+  \item \spxentry{\_\_init\_\_()}\spxextra{InfoSecurityRequest method}, 
+		10
+  \item \spxentry{\_\_init\_\_()}\spxextra{Portfolio method}, 5
+  \item \spxentry{\_\_init\_\_()}\spxextra{PortfolioHistory method}, 7
+  \item \spxentry{\_\_init\_\_()}\spxextra{SecurityState method}, 10
+  \item \spxentry{\_\_init\_\_()}\spxextra{StockPurchaseProcessMoex method}, 
+		8
+  \item \spxentry{\_\_init\_\_()}\spxextra{StockPurchaseRequest method}, 
+		9
+  \item \spxentry{\_\_init\_\_()}\spxextra{StockPurchaseResponse method}, 
+		10
+  \item \spxentry{\_\_init\_\_()}\spxextra{StockSecurityPrice method}, 
+		11
+  \item \spxentry{\_\_init\_\_()}\spxextra{StrategyResponse method}, 13
+
+  \indexspace
+
+  \item \spxentry{BaseStrategy}\spxextra{class in src.structures.st\_strategies}, 
+		12
+  \item \spxentry{BUY}\spxextra{TypeAction attribute}, 13
+
+  \indexspace
+
+  \item \spxentry{calc\_amount()}\spxextra{Portfolio method}, 5
+  \item \spxentry{calc\_amount\_buy()}\spxextra{Portfolio method}, 6
+  \item \spxentry{calc\_amount\_sell()}\spxextra{Portfolio method}, 6
+  \item \spxentry{calc\_purchase\_quantity()}\spxextra{StockPurchaseProcessMoex static method}, 
+		8
+  \item \spxentry{calc\_shares()}\spxextra{Portfolio static method}, 6
+  \item \spxentry{call\_strategy()}\spxextra{Portfolio method}, 6
+  \item \spxentry{check\_st\_tp()}\spxextra{Portfolio method}, 6
+
+  \indexspace
+
+  \item \spxentry{DataMessage}\spxextra{class in src.structures.st\_purchase}, 
+		8
+  \item \spxentry{DataRequest}\spxextra{class in src.structures.st\_strategies}, 
+		12
+
+  \indexspace
+
+  \item \spxentry{free\_balance}\spxextra{Portfolio property}, 6
+  \item \spxentry{full\_balance}\spxextra{Portfolio property}, 7
+
+  \indexspace
+
+  \item \spxentry{generate\_message()}\spxextra{StockPurchaseProcessMoex static method}, 
+		9
+  \item \spxentry{get\_decision()}\spxextra{BaseStrategy method}, 12
+  \item \spxentry{get\_history()}\spxextra{PortfolioHistory method}, 7
+  \item \spxentry{get\_json()}\spxextra{DataRequest method}, 13
+  \item \spxentry{get\_json()}\spxextra{Securities method}, 8
+  \item \spxentry{get\_request()}\spxextra{BaseStrategy method}, 12
+  \item \spxentry{get\_state()}\spxextra{StockPurchaseRequest method}, 
+		9
+
+  \indexspace
+
+  \item \spxentry{history}\spxextra{Portfolio property}, 7
+
+  \indexspace
+
+  \item \spxentry{InfoSecurityRequest}\spxextra{class in src.structures.st\_securities}, 
+		10
+
+  \indexspace
+
+  \item \spxentry{log\_history()}\spxextra{Portfolio method}, 7
+  \item \spxentry{log\_history()}\spxextra{PortfolioHistory method}, 7
+
+  \indexspace
+
+  \item \spxentry{module}
+    \subitem \spxentry{simulation}, 5
+    \subitem \spxentry{src}, 14
+    \subitem \spxentry{src.structures.st\_portfolio}, 5
+    \subitem \spxentry{src.structures.st\_purchase}, 8
+    \subitem \spxentry{src.structures.st\_securities}, 10
+    \subitem \spxentry{src.structures.st\_strategies}, 12
+
+  \indexspace
+
+  \item \spxentry{NOTHING}\spxextra{TypeAction attribute}, 13
+
+  \indexspace
+
+  \item \spxentry{Portfolio}\spxextra{class in src.structures.st\_portfolio}, 
+		5
+  \item \spxentry{PortfolioHistory}\spxextra{class in src.structures.st\_portfolio}, 
+		7
+
+  \indexspace
+
+  \item \spxentry{Securities}\spxextra{class in src.structures.st\_portfolio}, 
+		8
+  \item \spxentry{securities}\spxextra{Portfolio property}, 7
+  \item \spxentry{security\_value()}\spxextra{SecurityState method}, 11
+  \item \spxentry{SecurityState}\spxextra{class in src.structures.st\_securities}, 
+		10
+  \item \spxentry{SELL}\spxextra{TypeAction attribute}, 13
+  \item \spxentry{sell\_all()}\spxextra{Portfolio method}, 7
+  \item \spxentry{short\_state()}\spxextra{SecurityState method}, 11
+  \item \spxentry{simulation}
+    \subitem \spxentry{module}, 5
+  \item \spxentry{src}
+    \subitem \spxentry{module}, 14
+  \item \spxentry{src.structures.st\_portfolio}
+    \subitem \spxentry{module}, 5
+  \item \spxentry{src.structures.st\_purchase}
+    \subitem \spxentry{module}, 8
+  \item \spxentry{src.structures.st\_securities}
+    \subitem \spxentry{module}, 10
+  \item \spxentry{src.structures.st\_strategies}
+    \subitem \spxentry{module}, 12
+  \item \spxentry{StockPurchaseProcessMoex}\spxextra{class in src.structures.st\_purchase}, 
+		8
+  \item \spxentry{StockPurchaseRequest}\spxextra{class in src.structures.st\_purchase}, 
+		9
+  \item \spxentry{StockPurchaseResponse}\spxextra{class in src.structures.st\_purchase}, 
+		10
+  \item \spxentry{StockSecurityPrice}\spxextra{class in src.structures.st\_securities}, 
+		11
+  \item \spxentry{StrategyResponse}\spxextra{class in src.structures.st\_strategies}, 
+		13
+
+  \indexspace
+
+  \item \spxentry{type\_process}\spxextra{Portfolio property}, 7
+  \item \spxentry{TypeAction}\spxextra{class in src.structures.st\_strategies}, 
+		13
+
+  \indexspace
+
+  \item \spxentry{update\_securities()}\spxextra{Portfolio method}, 7
+  \item \spxentry{update\_state()}\spxextra{SecurityState method}, 11
+
+\end{theindex}

@@ -9,7 +9,7 @@ from aiogram.utils.helper import Helper, HelperMode, ListItem
 from config import TOKEN
 from src.strategies.strategy_macd import get_decision_macd_conservative_strategy
 from src.structures.st_portfolio import Portfolio
-
+import json
 
 class TestStates(Helper):
     mode = HelperMode.snake_case
@@ -36,6 +36,10 @@ current_state_message = 'Текущее состояние - "{current_state}"'
 get_tickers_message = 'Пожалуйста, выберите из предложенного списка тикеры, которые добавите в свой портфель. \n\nКогда будете готовы перейти к следующему этапу - нажмите кнопку \n/set_sum'
 get_sum_message = 'Теперь введите сумму'
 get_weights_message = 'Теперь запишите значения весов на каждый тикер через запятую. \n\nВажные замечания: \nСумма весов должна быть равна 1. \nДесятичный разделитель - "."'
+
+# ДОБАВИЛ Я
+portfolio_exists = False
+portfolio: Portfolio
 
 MESSAGES = {
     'start': start_message,
@@ -119,25 +123,38 @@ async def set_weights_command(message: types.Message):
 
 @dp.message_handler(state='*', commands=['trade', 'Запустить_симуляцию'])
 async def set_weights_command(message: types.Message):
-    global weights, summa, tickers
+    global weights, summa, tickers, portfolio_exists, portfolio
     weights = [float(i) for i in weights]
-    portfolio = Portfolio(tickers=tickers, weights=weights, init_balance=float(summa),
-                          strategy=get_decision_macd_conservative_strategy)
+    if not portfolio_exists:
+        portfolio = Portfolio(tickers=tickers, weights=weights, init_balance=float(summa),
+                              strategy=get_decision_macd_conservative_strategy)
 
-    for i in range(10):
-        await portfolio.call_strategy()
-        if portfolio.flg_end_process:
-            break
+    try:
+        for i in range(1):
+            resp = await portfolio.call_strategy()
+            if portfolio.flg_end_process:
+                portfolio_exists = False
+                break
 
-        await message.reply(
-            f'Баланс: {portfolio.full_balance:0.2f} | {portfolio.securities}'
-        )
+            await message.reply(
+                f'Баланс: {portfolio.full_balance:0.2f} | \n'
+                f'{json.dumps(resp.get(), indent=4, ensure_ascii=False)}'
+            )
+    except Exception as e:
+        print(e)
+        portfolio = Portfolio(tickers=tickers, weights=weights, init_balance=float(summa),
+                              strategy=get_decision_macd_conservative_strategy)
 
 
 @dp.message_handler(state='*', commands=['cancel', 'Отмена'])
 async def process_setstate_command(message: types.Message):
+    global portfolio_exists
+
+    portfolio_exists = False
+
     state = dp.current_state(user=message.from_user.id)
     await state.reset_state()
+
     return await message.reply(MESSAGES['state_reset'])
 
 

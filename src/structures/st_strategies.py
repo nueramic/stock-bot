@@ -50,9 +50,15 @@ class StrategyResponse:
         self.quantity = quantity
 
     def __repr__(self):
-        return f"StrategyResponse(ticker={self.ticker}, type_action={self.type_action}, price={self.price}, " \
-               f"quantity={self.quantity}, dtime_now={self.dtime_now}, stop_loss={self.stop_loss}, " \
-               f"take_profit={self.take_profit}, comment={self.comment})"
+        return f'StrategyResponse(' \
+               f'\nticker : {self.ticker},' \
+               f'\ntype_action : {self.type_action},' \
+               f'\nprice : {self.price},' \
+               f'\nquantity : {self.quantity},' \
+               f'\ndtime_now : {self.dtime_now},' \
+               f'\nstop_loss : {self.stop_loss},' \
+               f'\ntake_profit : {self.take_profit},' \
+               f'\ncomment : {self.comment})'
 
 
 class DataRequest:
