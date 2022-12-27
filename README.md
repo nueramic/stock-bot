@@ -4,48 +4,69 @@ stock bot python
 
 ```mermaid
 
-flowchart TD
+flowchart 
     
     subgraph Запрос данных 
     
-        stockRequest(SecurityRequest) --> |Асинхронные \n запросы к бирже| moex(((MOEX <br/>aiomoex)))
-        stockRequest -.-> |Запросы в другие \n источники| anotherStockData(((STOCK DATA)))
-        moex --> |парсинг| stockResponse(StockResponse)
-        anotherStockData --> |возможно другой \nпарсинг| stockResponse(StockResponse)
+        
+        
+        subgraph Обработка разных форматов источников
+        
+            stockRequest(SecurityRequest)
+            stockRequest --> |Асинхронные \n запросы к бирже| moex(((MOEX \naiomoex)))
+            stockRequest -.-> |Запросы в другие \n источники| anotherStockData(((STOCK DATA)))
+            moex --> stockResponseParser(Парсинг данных от источников)
+            stockRequest -.-> |Самый лучший путь \n сразу со всеми данными| broker(((Данные от \nброкера)))
+            anotherStockData -.->  stockResponseParser
+            broker -.-> stockResponseParser
+            
+        end
+        
+        stockResponseParser --> stockResponse(MarketResponse. Унифицированный \n формат ответа от источников)
     
     end 
     
     subgraph Инициализация процесса торговли 
     
-        initialStretegies(Выбор пула стратегий и \n формирование правил торговли) --> dataRequirments(Требования к данным от биржи)
+        initialStrategies(Выбор пула стратегий и \n формирование правил торговли) --> dataRequirments(Требования к данным от биржи)
         dataRequirments --> stockRequest 
-        style initialStretegies stroke-dasharray: 5 5
-     
+        style initialStrategies stroke-dasharray: 5 5
+        
+        initialPortfolio(Инициализация портфеля) 
+        style initialPortfolio stroke-dasharray: 5 5
+        
+        initialPortfolio --> dataRequirments
+    end
+    
+    
+    subgraph Портфель 
+        
+        portfolio(((Портфель. История торговли,\n статистики по портфелю)))
+        initialPortfolio --> portfolio
+        stockResponse --> |Передача данных на \n портфель| portfolioLog(Логирование данных в портфеле) 
+        portfolioLog --- portfolio
         
     end
     
     subgraph Стратегия 
-        stockResponse --> |Передача данных в \n стратегию| strategy(Расчет стратегии и \n формирование ответа)
+    
+        portfolio --> |Передача данных о \n состоянии портфеля| strategy
+        strategyResponse --> |Проверка на возможность \n совершения сделки| portfolio
+        stockResponse --> |Передача данных в \n стратегию о состоянии рынка| strategy(Расчет стратегии и \n формирование ответа)
         strategy --> strategyResponse(StrategyResponse \n Требования к покупке \n или продаже)
     
     end
     
-    subgraph Портфель 
-        portfolio(Портфель. История торговли,\n статистики по портфелю)
-        stockResponse --> |Передача данных на \n портфель| portfoliolog(Логирование данных в портфеле) 
-        strategyResponse --> |Передача данных на \n портфель| portfoliocheck(Проверка на возможность \n совершения сделки)
-        portfoliolog <-.-> portfolio
-        portfoliocheck <-.-> portfolio
-        
-    end
-    
     subgraph Покупка на бирже 
         portfolio --> stockPurchaseRequest(StockPurchaseRequest) 
-        stockPurchaseRequest -.-> |Запрос на обновление данных \n если рассчет стратегии занял \nвремя большее тика| stockRequest 
-        stockPurchaseRequest --> stockPurchaseResponse(StockPurchaseResponse)
-        stockResponse --> |Передача данных на \n покупку| stockPurchaseResponse
-        stockPurchaseResponse --> |Обновление состояния портфеля| portfolio
-    
-    end
+        stockPurchaseRequest --> |Запрос на обновление данных \n т.к. расчет стратегии занял время | stockRequest 
         
+        StockPurchaseProcess(((Процесс покупки \n на бирже))) 
+        
+        stockResponse --> |Передача данных на \n покупку| StockPurchaseProcess
+        stockPurchaseResponse(stockPurchaseResponse) --> |Обновление состояния портфеля| portfolio
+        
+        stockPurchaseRequest --> StockPurchaseProcess --> stockPurchaseResponse
+    
+    end    
 ```

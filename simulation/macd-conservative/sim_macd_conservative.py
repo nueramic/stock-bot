@@ -1,21 +1,26 @@
+from __future__ import annotations
+
 import asyncio
 
 import pandas as pd
 import plotly.express as px
 
 from src.parse_securities.async_moex import get_pandas_series, RequestOneSecurity
-from src.portfolio.base_portfolio import SecurityState
+from src.structures.st_portfolio import SecurityState
 from src.strategies.strategy_macd import get_decision_macd_conservative_strategy
 
-TIMEFRAME = ['2022-04-10', '2022-10-30']
+TIMEFRAME = ['2022-04-10', '2022-11-14']
 
 
-async def simulate_trading(ticker: str, balance: float) -> [float, list[float]]:
+async def _simulate_trading(ticker: str,
+                            balance: float,
+                            strategy: callable) -> [float, list[float]]:
     """
     Возвращает итоговый баланс после торговли и график изменения баланса
 
     :param ticker: тикер;
     :param balance: начальный баланс;
+    :param strategy: стратегия. Функция, которая принимает на вход цены и возвращает решение StrategyResponse;
     :return: итоговый баланс, изменение баланса, массив цен закрытия;
     """
 
@@ -56,7 +61,7 @@ async def simulate_trading(ticker: str, balance: float) -> [float, list[float]]:
 
         # Если у нас нет бумаг в портфеле, то мы можем совершить новую сделку
         else:
-            decision = await get_decision_macd_conservative_strategy(prices.iloc[:i])
+            decision = await strategy(prices.iloc[:i])
             if decision.flg_action == 1:
                 amount = int(balance // price)
                 security_state_portfolio = SecurityState(amount, price, decision.stop_loss, decision.take_profit)
@@ -77,19 +82,19 @@ async def simulate_trading(ticker: str, balance: float) -> [float, list[float]]:
     return balance, pd.Series(balance_dynamic, index=prices.iloc[59:].index, name=f'{ticker} balance')
 
 
-async def sim(balance: float = 100_000):
+async def sim(strategy: callable, balance: float = 100_000) -> None:
     """
     Запускает симуляцию торговли на всех тикерах. Выводит итоговый баланс и график изменения баланса.
     Сохраняет пандас датафрейм с торговлей по каждой бумаге в одну таблицу в excel.
     """
-
+    flg = False
     tickers = ['SBER', 'GAZP', 'LKOH', 'ROSN', 'TATN', 'VTBR', 'YNDX', 'SNGS', 'MGNT', 'NVTK']
 
     balance_dynamics = []
     final_balances = []
 
     for ticker in tickers:
-        final_balance, balance_dynamic = await simulate_trading(ticker, balance / len(tickers))
+        final_balance, balance_dynamic = await _simulate_trading(ticker, balance / len(tickers), strategy)
         balance_dynamics.append(balance_dynamic)
         final_balances.append(final_balance)
 
@@ -98,13 +103,16 @@ async def sim(balance: float = 100_000):
 
     output_df = pd.concat(balance_dynamics, axis=1)
     output_df['Итоговый баланс'] = output_df.sum(axis=1)
-    output_df.to_excel('output_macd_2022_11_01.xlsx')
-    fig_by_tickers = px.line(output_df.iloc[:, :-1], title='<b>Динамика балансов по бумагам</b>')
-    fig_by_tickers.write_html('./balance_by_tickers_macd_2022_11_01.html')
 
-    fig_full_balance = px.line(output_df.iloc[:, -1], title='<b>Динамика итогового баланса</b>')
-    fig_full_balance.write_html('./balance_full_macd_2022_11_01.html')
+    if flg:
+        output_df.to_excel('output_macd_2022_11_01.xlsx')
+
+        fig_by_tickers = px.line(output_df.iloc[:, :-1], title='<b>Динамика балансов по бумагам</b>')
+        fig_by_tickers.write_html('./balance_by_tickers_macd_2022_11_01.html')
+
+        fig_full_balance = px.line(output_df.iloc[:, -1], title='<b>Динамика итогового баланса</b>')
+        fig_full_balance.write_html('./balance_full_macd_2022_11_01.html')
 
 
 if __name__ == '__main__':
-    asyncio.run(sim())
+    asyncio.run(sim(get_decision_macd_conservative_strategy))
