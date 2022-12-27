@@ -6,10 +6,9 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils import executor
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 
-from config import TOKEN
 from src.strategies.strategy_macd import get_decision_macd_conservative_strategy
 from src.structures.st_portfolio import Portfolio
-import json
+
 
 class TestStates(Helper):
     mode = HelperMode.snake_case
@@ -128,6 +127,7 @@ async def set_weights_command(message: types.Message):
     if not portfolio_exists:
         portfolio = Portfolio(tickers=tickers, weights=weights, init_balance=float(summa),
                               strategy=get_decision_macd_conservative_strategy)
+        portfolio_exists = True
 
     try:
         for i in range(1):
@@ -137,8 +137,9 @@ async def set_weights_command(message: types.Message):
                 break
 
             await message.reply(
-                f'Баланс: {portfolio.full_balance:0.2f} | \n'
-                f'{json.dumps(resp.get(), indent=4, ensure_ascii=False)}'
+                f'Дата: {portfolio.st_time.strftime("%d.%m.%Y")}\n'
+                f'Баланс: {portfolio.full_balance:0.2f} \n'
+                f'{resp}'
             )
     except Exception as e:
         print(e)
